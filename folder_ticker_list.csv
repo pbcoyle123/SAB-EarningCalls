@@ -1,0 +1,382 @@
+TICKER,company_name,role,Folder Name
+KSS,Kohls Corp,target/PEER,0JRL.L
+PTON,Peloton Interactive Inc.,target/PEER,PTON 
+SNAP,Snap Inc.,target/peer,SNAP
+TSLA,Tesla Inc.,target/peer,TL0.DE
+VOW3.DE,Volkswagen AG,target/PEER,VOW3.DE
+BCS,Barclays plc,target/peer,BCS
+BA,The Boeing Company,target,BOE.L
+BBBY,Bed Bath & Beyond Inc.,target,0HMI.L
+BHC,Bausch Health Companies Inc. (Valeant),target,BHC.TO
+EFX,Equifax Inc.,target,0II3.L
+EXC,Exelon Corporation,target,0IJN.L
+FXLV,F45 Training Holdings Inc.,target,FXLV
+GE,General Electric Company,target,GEC.L
+HOOD,Robinhood Markets Inc.,target,HOOD
+INTC,Intel Corporation,target,INTC
+KBNT,Kubient Inc.,target,KBNT
+NKLA,Nikola Corporation,target,NKLA
+OTRK,Ontrak Inc.,target,OTRK 
+RNO.PA,Renault SA,target,RNO.PA
+UAL,United Airlines Holdings Inc.,target,0LIU.L
+WFC,Wells Fargo & Company,target,NWT.DE
+0R0P.L,Blackberry,target,0R0P.L
+GRPN,Groupon,target,GRPN
+TWTR,Twitter,target,TWTR
+TXN,Texas Instruments,peer,TXN
+TSM,TSM,peer,TSM
+STM,STMicroelectronics,peer,STM
+CDNS,Cadence Design Systems,peer,CDNS
+AMAT,applied materials,peer,AMAT
+005930.KS,Samsung Electronics,peer,005930.KS
+AMKR,amkor,peer,AMKR
+MU,Micron,peer,MU
+ROST,Ross Stores,peer,ROST
+RTX,RTX Corporation,peer,RTX
+0175.HK,Geely Automobile Holdings,peer,GRU.VI
+035420.KS,NAVER Corp,peer,035420.KS
+0700.HK,Tencent Holdings Ltd,peer,0700 HK
+1024.HK,Kuaishou Technology,peer,1024 HK
+1810.HK,Xiaomi Corporation (EV),peer,1810 HK
+2208.HK,Xinjiang Goldwind Science & Technology,peer,2208 hk
+4536.T,Santen Pharmaceutical Co. Ltd.,peer,4536.T
+4689.T,LY Corporation (LINE/Yahoo Japan),peer,4689.T
+4755.T,Rakuten Group (Rakuten Securities),peer,4755.T
+6702.T,Fujitsu Limited,peer,6702.T
+7011.T,Mitsubishi Heavy Industries,peer,7011.T 
+8473.T,SBI Holdings (SBI Securities),peer,8473.T 
+AAL,American Airlines Group Inc.,peer,AAL
+AAPL,Apple Inc.,peer,AAPL
+ABBV,AbbVie Inc.,peer,ABBV
+ACDVF,Air Canada,peer,AC.TO 
+ACHC,Acadia Healthcare,peer,ACHC 
+AEE,Ameren Corporation,peer,AEE
+AEO,American Eagle Outfitters Inc.,peer,AEO
+AEP,American Electric Power Company Inc.,peer,AEP
+AES,The AES Corporation,peer,AES
+AFLYY,Air France-KLM S.A.,peer,AFLYY… OR .. AF.PA 
+ALC,Alcon Inc.,peer,ALC
+ALGT,Allegiant Travel Company,peer,ALGT
+ALK,Alaska Air Group Inc.,peer,ALK
+ALLY,Ally Financial Inc.,peer,ALLY
+ALM.MC,Almirall S.A.,peer,ALM.MC
+AMD,Advanced Micro Devices,peer,AMD
+AMRX,Amneal Pharmaceuticals Inc.,peer,AMRX 
+AMWL,Amwell (American Well),peer,AMWL 
+AMZN,Amazon.com,peer,AMZN
+ANF,Abercrombie & Fitch Co.,peer,ANF
+APP,AppLovin,peer,APP
+ARHS,Arhaus,peer,ARHS
+ARM,Arm Holdings plc,peer,ARM
+ATO,Atmos Energy Corporation,peer,ATO 
+AVGO,Broadcom Inc.,peer,AVGO 
+AZUL,Azul S.A.,peer,AZUL
+BABA,Alibaba Group (T-Head Yitian),peer,BABA
+BAC,Bank of America Corporation,peer,BAC 
+BAESY,BAE Systems plc,peer,BA.L
+BBD-B.TO,Bombardier Inc.,peer,0QZP.L
+BBY,Best Buy,peer,BBY
+BCS,Barclays plc,peer,BCS
+BIDU,Baidu Inc. (Kunlun),peer,BIDU 
+BILI,Bilibili Inc.,peer,BILI 
+BJ,BJâ€™s Wholesale Club,peer,BJ
+BKH,Black Hills Corporation,peer,BKH
+BKI,Black Knight (historical; now part of ICE),peer,BKI
+BMO,Bank of Montreal,peer,BMO
+BMW.DE,BMW AG,peer,BMW.DE
+BNS,Bank of Nova Scotia (Scotiabank),peer,BNS
+BODI,The Beachbody Company Inc. (BODi),peer,BODI
+BURL,Burlington Stores Inc.,peer,BURL 
+C,Citigroup Inc.,peer,C-PK
+CFG,Citizens Financial Group,peer,CFG
+CI,The Cigna Group (Evernorth Behavioral),peer,CI
+CLGX,CoreLogic (historical),peer,CLGX
+CMCX.L,CMC Markets,peer,CMCX.L
+CMS,CMS Energy Corporation,peer,CMS
+CMWAY,Commonwealth Bank of Australia (ADR),peer,CMWAY
+CNC,Centene (Magellan Health),peer,CNC
+CNP,CenterPoint Energy Inc.,peer,CNP
+COF,Capital One Financial Corporation,peer,COF
+COIN,Coinbase,peer,COIN
+COO,CooperCompanies Inc.,peer,COO
+COST,Costco Wholesale,peer,COST
+CPA,Copa Holdings S.A.,peer,CPA
+CPCAY,Cathay Pacific Airways Ltd.,peer,CPCAY
+DDS,Dillardâ€™s Inc.,peer,-
+CRTO,Criteo,peer,CRTO
+CS,Credit Suisse Group AG (historical),peer,CS
+CTV,Innovid (CTV),peer,CTV
+CUTRQ,Cutera Inc. (OTC),peer,cutr
+CVS,CVS Health,peer,CVS
+D,Dominion Energy Inc.,peer,D
+DAL,Delta Air Lines Inc.,peer,DAL
+DB,Deutsche Bank AG,peer,DB
+DFS,Discover Financial Services,peer,DFS
+DLAKY,Deutsche Lufthansa AG,peer,LHA.DE
+DNB,Dun & Bradstreet Holdings,peer,DNB
+ED,Consolidated Edison Inc.,peer,-
+DOYU,DouYu International Holdings Ltd.,peer,DOYU
+DRIO,DarioHealth,peer,DRIO
+DSP,Viant Technology,peer,DSP
+DTE,DTE Energy Company,peer,DTE
+DTRUY,Daimler Truck Holding AG,peer,DTG.DE
+DUK,Duke Energy Corporation,peer,DUK
+DV,DoubleVerify,peer,DV
+EADSY,Airbus SE,peer,AIR.PA 
+ETOR,eToro Group Ltd.,peer,-
+EIX,Edison International,peer,EIX
+ELAL.TA,EL AL Israel Airlines Ltd.,peer,ELAL.TA
+ELV,Elevance Health (Carelon Behavioral),peer,ELV
+ENR.DE,Siemens Energy AG,peer,ENR.DE
+ERJ,Embraer S.A.,peer,ERJ
+FCAU,Fiat Chrysler Automobiles (historical),peer,-
+ES,Eversource Energy,peer,ES
+ESYJY,easyJet plc,peer,ESYJY
+ETD,Ethan Allen Interiors,peer,ETD
+FLYY,Spirit Aviation Holdings Inc.,peer,-
+FRAS.L,Frasers Group plc (Everlast Gyms),peer,-
+ETR,Entergy Corporation,peer,ETR
+EVRG,Evergy Inc.,peer,EVRG
+EXPN.L,Experian plc,peer,EXPN.L
+F,Ford Motor Company,peer,F
+FA,First Advantage,peer,FA
+FE,FirstEnergy Corp.,peer,FE
+GALD,Galderma Group AG,peer,-
+GBG.L,GB Group plc,peer,-
+FICO,Fair Isaac Corporation (FICO),peer,FICO
+FITB,Fifth Third Bancorp,peer,FITB
+FRC,First Republic Bank (historical),peer,FRC
+FTK.DE,flatexDEGIRO AG,peer,FTK.DE
+FTS,Fortis Inc.,peer,FTS
+FUJHY,Subaru Corporation,peer,FUJHY
+FUJIY,Fujifilm Holdings Corporation,peer,FUJIY
+FUTU,Futu Holdings (moomoo),peer,FUTU
+GD,General Dynamics Corporation,peer,GD
+GWLLY,Great Wall Motor Company,peer,-
+GYM.L,The Gym Group plc,peer,-
+HAL.NS,Hindustan Aeronautics Ltd.,peer,-
+GELYY,Geely Automobile Holdings,peer,GRU.VI
+GEN,Gen Digital (LifeLock),peer,GEN
+GM,General Motors Company,peer,GM
+HINOY,Hino Motors Ltd.,peer,-
+GOLL4.SA,Gol Linhas AÃ©reas Inteligentes S.A.,peer,GOLL4.SA
+GOOGL,Alphabet Inc. (YouTube/Shorts),peer,GOOGL
+GPS,Gap Inc.,peer,GPS
+GRMN,Garmin Ltd. (Tacx),peer,GRMN
+GS,The Goldman Sachs Group,peer,GS
+HBAN,Huntington Bancshares,peer,HBAN
+HIK.L,Hikma Pharmaceuticals plc,peer,HIK.L
+HIMS,Hims & Hers Health,peer,HIMS
+HMC,Honda Motor Co. Ltd.,peer,HMC
+HO.PA,Thales,peer,HO.PA
+HOME,At Home Group,peer,HOME
+HON,Honeywell International Inc.,peer,HON
+HRT,HireRight,peer,HRT
+HSBC,HSBC Holdings plc,peer,HSBC
+HTHIY,Hitachi Ltd. (diagnostic imaging pre-2021),peer,6501.T
+ICEAIR.IC,Icelandair Group hf.,peer,-
+HUYA,HUYA Inc.,peer,HUYA
+IGG.L,IG Group,peer,-
+HVT,Haverty Furniture,peer,HVT
+HYLN,Hyliion Holdings Corp.,peer,HYLN
+HYMTF,Hyundai Motor Company,peer,HYUD.L
+IVECF,IVECO Group N.V.,peer,-
+IAS,Integral Ad Science,peer,IAS
+JAPSY,Japan Airlines Co. Ltd.,peer,-
+IBKR,Interactive Brokers,peer,IBKR
+JCP,JCPenney (historical),peer,-
+IBM,International Business Machines,peer,IBM
+ICAGY,International Consolidated Airlines Group S.A.,peer,IAG.L 
+IDA,IDACORP Inc.,peer,IDA
+INMD,InMode Ltd.,peer,INMD
+INTU,Intuit (Credit Karma),peer,INTU
+KIMTF,Kia Corporation,peer,-
+IRWD,Ironwood Pharmaceuticals Inc.,peer,IRWD
+IVG.MI,Iveco Group N.V.,peer,IVG.MI
+JBLU,JetBlue Airways Corporation,peer,JBLU
+JD.L,JD Sports Fashion plc (JD Gyms),peer,JD.L
+JNJ,Johnson & Johnson (J&J Vision),peer,JNJ
+JPM,JPMorgan Chase & Co.,peer,JPM
+JWN,Nordstrom Inc.,peer,JWN
+KEY,KeyCorp,peer,KEY
+KIND,Nextdoor Holdings Inc.,peer,KIND
+LCID,Lucid Group Inc.,peer,LCID
+LOT,Lotus Technology Inc.,peer,-
+LDO.MI,Leonardo S.p.A.,peer,LDO.MI
+LEV,Lion Electric,peer,LEV
+LFST,LifeStance Health,peer,LFST
+LHX,L3Harris Technologies,peer,LHX
+LI,Li Auto Inc.,peer,LI
+LMT,Lockheed Martin Corporation,peer,LMT
+LNT,Alliant Energy Corporation,peer,LNT
+LPLA,LPL Financial,peer,LPLA
+LSEG.L,London Stock Exchange Group (Refinitiv),peer,LSEG.L
+LTH,Life Time Group Holdings Inc.,peer,LTH
+MBGYY,Mercedes-Benz Group AG (ADR),peer,-
+LTM,LATAM Airlines Group S.A.,peer,LTM
+LULU,Lululemon Athletica Inc. (historical Mirror),peer,LULU
+LUV,Southwest Airlines Co.,peer,LUV
+LZB,La-Z-Boy,peer,LZB
+M,Macyâ€™s Inc.,peer,M
+MA,Mastercard (Ekata),peer,MA
+MBG.DE,Mercedes-Benz Group AG,peer,MBG.DE
+MCO,Moodyâ€™s Corporation,peer,MCO
+META,Meta Platforms Inc.,peer,META
+MFG,Mizuho Financial Group,peer,MFG
+MGNI,Magnite,peer,MGNI
+MHVYF,Mitsubishi Heavy Industries,peer,7011.T
+MITK,Mitek Systems,peer,MITK
+MMTOF,Mitsubishi Motors Corporation,peer,7211.T
+MZDAY,Mazda Motor Corporation,peer,-
+MNKKQ,Mallinckrodt plc (OTC),peer,MNKKQ
+MRVL,Marvell Technology,peer,MRVL
+MS,Morgan Stanley,peer,MS
+MSFT,Microsoft Corp. (Azure Maia/Cobalt),peer,MSFT
+MTB,M&T Bank Corporation,peer,MTB
+MTUAY,MTU Aero Engines AG,peer,MTX.DE
+MUFG,Mitsubishi UFJ Financial Group,peer,MUFG
+NDOI,Endo International plc (OTCQX),peer,ENDP
+NEE,NextEra Energy Inc.,peer,NEE
+NORSE.OL,Norse Atlantic ASA,peer,-
+NEXN,Nexxen International (ex-Tremor),peer,NEXN
+NGG,National Grid plc,peer,NGG
+NI,NiSource Inc.,peer,NI
+NIO,NIO Inc.,peer,NIO
+NJR,New Jersey Resources Corporation,peer,NJR
+NMR,Nomura Holdings,peer,NMR
+NOC,Northrop Grumman Corporation,peer,NOC
+NRDXF,Nordex SE,peer,NDX1.DE
+NRG,NRG Energy Inc.,peer,NRG
+NSANY,Nissan Motor Co. Ltd.,peer,7201.T
+NVDA,NVIDIA Corporation,peer,NVDA
+NWARF,Norwegian Air Shuttle ASA,peer,NAS.OL
+P911,Porsche AG,peer,-
+NWE,NorthWestern Energy Group Inc.,peer,NWE
+OB,Outbrain,peer,OB
+OGE,OGE Energy Corp.,peer,OGE
+OGN,Organon & Co.,peer,OGN
+OGS,ONE Gas Inc.,peer,OGS
+OLLI,Ollieâ€™s Bargain Outlet,peer,OLLI
+ORCL,Oracle (Moat/Oracle Advertising â€“ historical),peer,ORCL
+PCAR,PACCAR Inc.,peer,PCAR
+PIR,Pier 1 Imports,peer,-
+PCG,PG&E Corporation,peer,PCG
+PLUS.L,Plus500,peer,-
+PDD,PDD Holdings Inc. (Temu),peer,PDD
+PEAR,Pear Therapeutics (historical),peer,PEAR
+PEG,Public Service Enterprise Group Inc.,peer,PEG
+PERI,Perion Network,peer,PERI
+PHG,Koninklijke Philips N.V.,peer,PHG
+PINS,Pinterest Inc.,peer,PINS
+PLNT,Planet Fitness Inc.,peer,PLNT
+PNC,The PNC Financial Services Group,peer,PNC
+PNM,PNM Resources Inc.,peer,PNM
+QABSY,Qantas Airways Ltd.,peer,-
+PNW,Pinnacle West Capital Corporation,peer,PNW
+POR,Portland General Electric Company,peer,POR
+PPL,PPL Corporation,peer,PPL
+PRGO,Perrigo Company plc,peer,PRGO
+PSNY,Polestar Automotive Holding,peer,PSNY
+PUBM,PubMatic,peer,PUBM
+QCOM,Qualcomm Incorporated,peer,QCOM
+RAMP,LiveRamp,peer,RAMP
+RDDT,Reddit Inc.,peer,RDDT
+RDY,Dr. Reddyâ€™s Laboratories Ltd.,peer,RDY
+RELX,RELX plc (LexisNexis Risk),peer,RELX
+RH,RH,peer,RH
+RIVN,Rivian Automotive Inc.,peer,RIVN
+RJF,Raymond James Financial,peer,RJF
+RNLSY,Renault SA (ADR),peer,RNO.PA
+ROKU,Roku (OneView DSP),peer,ROKU
+RY,Royal Bank of Canada,peer,RY
+RYAAY,Ryanair Holdings plc,peer,RYAAY
+RYCEY,Rolls-Royce Holdings plc,peer,RRU.DE 
+SAAB-B.ST,Saab AB,peer,SAAB-B.ST
+SATS.OL,SATS ASA,peer,-
+SAFRY,Safran SA,peer,SAF.PA
+SAN,Banco Santander S.A.,peer,SAN
+SDZNY,Sandoz ADR (SDZNY),peer,-
+SCHW,The Charles Schwab Corporation,peer,SCHW
+SDZ,Sandoz Group AG (SIX),peer,0SAN.L 
+SGRE.MC,Siemens Gamesa Renewable Energy (historical),peer,SGRE.MC
+SINGY,Singapore Airlines Ltd.,peer,-
+SMFG,Sumitomo Mitsui Financial Group,peer,-
+SHCR,Sharecare,peer,SHCR
+SIEGY,Siemens AG (legacy Power),peer,SIE.DE
+SMMNY,Siemens Healthineers AG,peer,SHL.DE 
+SNBR,Sleep Number,peer,SNBR
+SNCY,Sun Country Airlines Holdings Inc.,peer,SNCY
+SO,The Southern Company,peer,SO
+SOFI,SoFi Technologies | SoFi Invest,peer,SOFI
+SQ,Block Inc. (Cash App Investing),peer,SQ
+SR,Spire Inc.,peer,SR
+SRE,Sempra,peer,SRE
+STI,SunTrust Banks Inc. (historical),peer,STI
+SUNPHARMA.NS,Sun Pharmaceutical Industries Ltd.,peer,-
+STLA,Stellantis N.V.,peer,STLA
+SUPN,Supernus Pharmaceuticals Inc.,peer,SUPN
+SZKMY,Suzuki Motor Corporation,peer,-
+SVV,Savers Value Village Inc.,peer,SVV
+TALK,Talkspace,peer,TALK
+TBHC,The Brand House Collective (f/k/a Kirklandâ€™s),peer,-
+TARS,Tarsus Pharmaceuticals Inc.,peer,TARS
+TBLA,Taboola,peer,TBLA
+TCS,The Container Store Group,peer,TCS
+TD,Toronto-Dominion Bank,peer,TD
+TDOC,Teladoc Health,peer,TDOC
+TEVA,Teva Pharmaceutical Industries Ltd.,peer,TEVA
+TFC,Truist Financial Corporation,peer,TFC
+TGYM.MI,Technogym S.p.A.,peer,-
+TGT,Target Corporation,peer,TGT
+THYAO.IS,Turkish Airlines,peer,-
+THLLY,Thales Group,peer,0IW5.L
+TIGR,UP Fintech (Tiger Brokers),peer,TIGR
+TJX,The TJX Companies Inc.,peer,TJX
+TM,Toyota Motor Corporation,peer,TM
+TRATF,Traton SE (Scania/MAN/Navistar),peer,8TRA.DE
+TRNR,Interactive Strength Inc. (FORME/CLMBR),peer,-
+TRI,Thomson Reuters (historical Refinitiv owner),peer,TRI
+TRU,TransUnion,peer,TRU
+TTD,The Trade Desk,peer,TTD
+TTM,Tata Motors Ltd.,peer,TTM
+TU,TELUS Corporation (TELUS Health),peer,TU
+TUEM,Tuesday Morning,peer,-
+TXT,Textron Inc. (Bell),peer,TXT
+U,Unity Software,peer,U
+UBS,UBS Group AG,peer,UBS
+UG.PA,PSA Group (historical),peer,-
+UGI,UGI Corporation,peer,UGI
+UHS,Universal Health Services (Behavioral Health),peer,UHS
+ULCC,Frontier Group Holdings Inc.,peer,ULCC
+ULTA,Ulta Beauty Inc.,peer,ULTA
+UNH,UnitedHealth Group (Optum Behavioral),peer,UNH
+UPHL,UpHealth,peer,UPH-WT
+USB,U.S. Bancorp,peer,USB
+VFS,VinFast Auto Ltd.,peer,VFS
+VKCO,VK Company Ltd.,peer,-
+VLRS,Controladora Vuela (Volaris),peer,VLRS
+VLVCY,Volvo Car AB,peer,VOLCAR-B.ST
+VLVLY,Volvo Group,peer,-
+VRSK,Verisk Analytics,peer,VRSK
+VRV.DE,Verve Group SE (Xetra: VRV),peer,-
+VST,Vistra Corp.,peer,VST
+VTRS,Viatris Inc.,peer,VTRS
+VVA.AX,Viva Leisure Limited,peer,-
+VWAGY,Volkswagen AG (ADR),peer,VWAP.BR
+VWS.CO,Vestas Wind Systems A/S,peer,VWS.CO
+W,Wayfair Inc.,peer,W
+WB,Weibo Corporation,peer,WB
+WEC,WEC Energy Group Inc.,peer,WEC
+WKHS,Workhorse Group,peer,WKHS
+WMT,Walmart Inc.,peer,WMT
+WSM,Williams-Sonoma Inc.,peer,WSM
+WTKWY,Wolters Kluwer,peer,WKL.AS
+WZZZY,Wizz Air Holdings plc,peer,WIZZ.L
+XEL,Xcel Energy Inc.,peer,XEL
+XIACY,Xiaomi Corporation (EV),peer,1810 HK
+XOS,Xos Inc.,peer,XOS
+XPEV,XPeng Inc.,peer,XPEV
+XPOF,Xponential Fitness Inc.,peer,XPOF
+YALA,Yalla Group Ltd.,peer,YALA
+YY,JOYY Inc.,peer,YY
+ZK,ZEEKR Intelligent Technology,peer,ZK
