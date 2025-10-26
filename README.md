@@ -25,7 +25,3 @@ Results are stored in the `output/` directory with classification results, embed
 
 ## GIVEN THE SIZE OF SOME OF THE OUTPUTTED EMBEDDING FILES AND THE AMOUNT OF RAW DATA NEEDED, ONLY SAMPLES OF DATA AND LOGS OF RESULTS ARE INCLUDED IN THE OUTPUT.
 
-Results are stored in the `output/` directory with classification results, embedding analysis reports, visualizations, and audio processing outputs.
-
-
-## GIVEN THE SIZE OF SOME OF THE OUTPUTTED EMBEDDING FILES AND THE AMOUNT OF RAW DATA NEEDED, ONLY SAMPLES OF DATA AND LOGS OF RESULTS ARE INCLUDED IN THE OUTPUT.
