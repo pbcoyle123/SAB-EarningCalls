@@ -1,0 +1,1573 @@
+
+================================================================================
+PEER BENCHMARK ANALYSIS
+Log file: output\gpt_classification_validation\analysis_log_20251024_154516.txt
+================================================================================
+✓ Loaded 23 peer groups from config
+✓ Found 23 target companies with defined peer groups
+
+📋 Loading Expert-Identified Bias Periods
+================================================================================
+  ✓ Extracted expert bias periods for 23 target companies
+    • INTC: Blame/Defensiveness/Evasion starting (2021, 3)
+    • SNAP: Blame/Defensiveness/Evasion starting (2022, 1) to (2022, 4)
+    • BBBY: Overconfidence starting (2020, 2) to (2022, 3)
+    • EFX: Blame/Defensiveness/Evasion starting (2017, 4) to (2018, 3)
+    • EXC: Blame/Defensiveness/Evasion starting (2023, 1)
+    • KSS: Blame/Defensiveness/Evasion starting (2024, 3)
+    • UAL: Blame/Defensiveness/Evasion starting (2017, 2) to (2017, 3)
+    • BHC: Overconfidence starting (2015, 4) to (2016, 3)
+    • BA: Blame/Defensiveness/Evasion starting (2019, 2) to (2020, 4)
+    • FXLV: Overconfidence starting (2022, 1) to (2022, 3)
+    ... and 13 more
+Initialized PeerBenchmark
+  Input: classification_results
+  Config: company_config.json
+  Output: output\gpt_classification_validation
+  Visualizations: output\gpt_classification_validation\visualizations
+  Peer groups loaded: 23
+  Expert bias periods loaded: 23
+
+1. Loading Attribution Data with Mapping
+================================================================================
+✓ Found 31 total instance folders
+✓ Found 31 instance folders with 05/ subdirectory
+
+📊 Team Distribution BEFORE Attribution Filtering:
+    management_team: 574,663 rows (60.9%)
+    external_members: 326,033 rows (34.6%)
+    unknown: 42,151 rows (4.5%)
+
+📊 Team Distribution AFTER Attribution Filtering:
+    management_team: 267,271 rows (99.1%)
+    unknown: 2,415 rows (0.9%)
+  ⚠️  Note: external_members filtered out if they don't make attribution statements
+  ✓  Solution: Use unfiltered data for non-attribution labels (Topics/Sentiment/Tone)
+
+✓ Loaded 3435 CSV files
+✓ Found 134 unique companies in data
+✓ Matched 21 target companies from config
+✓ Matched 117 peer companies from config
+
+Data Summary:
+  Total rows (unfiltered): 942,847
+  After attribution filtering: 269,686 (28.6%)
+  Target company rows (filtered): 50,244
+  Peer company rows (filtered): 224,553
+
+📊 Adding Snippet-Level SAB Metrics (Attribution Data Only)
+================================================================================
+  ✓ Created 4-way attribution types
+  ✓ SAB statements: 151,495 (56.2% of all attributions)
+
+  📊 Attribution Distribution (Raw):
+    - Positive-Internal: 125,727 (46.6% of all)
+    - Positive-External: 27,779 (10.3% of all)
+    - Negative-External: 25,768 (9.6% of all)
+    - Negative-Internal: 19,190 (7.1% of all)
+    - Other/Unknown: 71,222 (26.4% of all)
+
+  📊 Attribution Distribution (Normalized - 4-way only):
+    - Positive-Internal: 125,727 (63.4% of 4-way)
+    - Positive-External: 27,779 (14.0% of 4-way)
+    - Negative-External: 25,768 (13.0% of 4-way)
+    - Negative-Internal: 19,190 (9.7% of 4-way)
+  ✓ Normalized total: 100.0% (should be 100%)
+
+📊 Adding Topic Category Mapping (Both Datasets)
+================================================================================
+  ✓ Attribution (filtered): Mapped 269,686 topics to 7 categories
+    - Operational Efficiency and Management: 113,216 (42.0%)
+    - Financial Performance Metrics: 76,739 (28.5%)
+    - Market and Industry Analysis: 24,022 (8.9%)
+    - Geographical and Economic Considerations: 16,315 (6.0%)
+    - Others: 15,009 (5.6%)
+  ✓ All Labels (unfiltered): Mapped 942,847 topics to 7 categories
+    - Operational Efficiency and Management: 298,783 (31.7%)
+    - Financial Performance Metrics: 238,789 (25.3%)
+    - Others: 217,291 (23.0%)
+    - Market and Industry Analysis: 66,269 (7.0%)
+    - Balance Sheet and Cash Flow Metrics: 53,153 (5.6%)
+
+📊 Adding Bias Period Flags (Both Datasets)
+
+📊 Adding Bias Period Flags to Data
+================================================================================
+  NOTE: Flagging BOTH targets AND their peers during bias periods
+        (Peers flagged when in same quarters as their target's bias period)
+
+  ✓ Labeled 33,789 segments in exact bias periods (targets + peers)
+  ✓ Labeled 28,170 segments in ±1Q bias windows (targets + peers)
+  ✓ Labeled 46,769 segments in ±2Q bias windows (targets + peers)
+  ✓ Labeled 83,410 segments in ±4Q bias windows (targets + peers)
+  ✓ Labeled 46,634 segments in -4Q pre-bias windows (targets + peers)
+  ✓ Labeled 46,585 segments in +4Q post-bias windows (targets + peers)
+
+  📊 Breakdown of Exact Bias Period Labels:
+      Target segments: 6,837
+      Peer segments:   26,898
+      Total:           33,735
+
+  → 12.5% exact bias labels
+  → 10.4% in ±1Q window
+  → 17.3% in ±2Q window
+  → 30.8% in ±4Q window
+  → 17.2% in -4Q pre-bias window
+  → 17.2% in +4Q post-bias window
+
+📊 Adding Bias Period Flags to Data
+================================================================================
+  NOTE: Flagging BOTH targets AND their peers during bias periods
+        (Peers flagged when in same quarters as their target's bias period)
+
+  ✓ Labeled 112,770 segments in exact bias periods (targets + peers)
+  ✓ Labeled 99,551 segments in ±1Q bias windows (targets + peers)
+  ✓ Labeled 163,676 segments in ±2Q bias windows (targets + peers)
+  ✓ Labeled 289,127 segments in ±4Q bias windows (targets + peers)
+  ✓ Labeled 163,941 segments in -4Q pre-bias windows (targets + peers)
+  ✓ Labeled 159,058 segments in +4Q post-bias windows (targets + peers)
+
+  📊 Breakdown of Exact Bias Period Labels:
+      Target segments: 23,177
+      Peer segments:   89,331
+      Total:           112,508
+
+  → 11.9% exact bias labels
+  → 10.5% in ±1Q window
+  → 17.3% in ±2Q window
+  → 30.5% in ±4Q window
+  → 17.3% in -4Q pre-bias window
+  → 16.7% in +4Q post-bias window
+
+✅ Returning TWO DataFrames:
+  1. df_attribution: 269,686 rows (for attribution analysis)
+  2. df_all_labels: 942,847 rows (for general label distributions)
+
+================================================================================
+DISTRIBUTION ANALYSIS
+================================================================================
+
+2. Analyzing GPT Label Distributions (Weighted)
+================================================================================
+  NOTE: Using unfiltered data for Topics/Sentiment/Tone (includes all speakers)
+        Using filtered data for Attribution labels (only rows with attributions)
+
+  📊 Full Transcript Analysis (Baseline)
+      Creating TWO versions for non-attribution labels:
+        1. All Snippets (includes questions, all statements)
+        2. Attribution Statements Only (subset where attribution_present='Y')
+    ✓ Topic: 7283 categories
+    ✓ Topic_Category: 7 categories
+    ✓ Temporal_Context: 3 categories
+    ✓ Content_Sentiment: 4 categories
+    ✓ Speaker_Tone: 4 categories
+    ✓ attribution_present: 1 categories
+    ✓ attribution_outcome: 3 categories
+    ✓ attribution_locus: 4 categories
+
+  📊 Creating Visualizations:
+      ✓ Saved: distribution_Topic_Category_all_snippets.png
+      ✓ Saved: distribution_Topic_Category_attribution_only.png
+      ✓ Saved: distribution_Content_Sentiment_all_snippets.png
+      ✓ Saved: distribution_Content_Sentiment_attribution_only.png
+      ✓ Saved: distribution_Temporal_Context_all_snippets.png
+      ✓ Saved: distribution_Temporal_Context_attribution_only.png
+      ✓ Saved: distribution_Topic_all_snippets.png
+      ✓ Saved: distribution_Topic_attribution_only.png
+      ✓ Saved: distribution_Speaker_Tone_all_snippets.png
+      ✓ Saved: distribution_Speaker_Tone_attribution_only.png
+      ✓ Saved: distribution_attribution_outcome.png
+      ✓ Saved: distribution_attribution_present.png
+      ✓ Saved: distribution_attribution_locus.png
+
+  📊 Section-Level Analysis
+      NOTE: Section comparisons also create TWO versions for non-attribution labels
+    ✓ prepared_remarks: 239,644 total snippets (non-attr labels), 113,774 attribution snippets
+    ✓ qna_section: 703,203 total snippets (non-attr labels), 155,912 attribution snippets
+
+  📊 Team-Level Analysis (Q&A Section Only)
+    NOTE: Team analysis focuses on Q&A where both management and analysts participate
+    Prepared remarks are primarily management, so team comparison is only meaningful in Q&A
+    ⚠️  Attribution labels EXCLUDED from team comparison (external_members don't make attributions)
+    ✓  Uses ALL SNIPPETS data (includes questions, all statements) - no 'attribution-only' version
+    Available teams in Q&A: ['external_members', 'management_team', 'unknown']
+    ✓ management_team: 338,948 Q&A snippets analyzed
+    ✓ external_members: 325,934 Q&A snippets analyzed
+
+  ✓ Saved weighted distribution charts to output\gpt_classification_validation\visualizations
+    - Full transcript: 8 label types
+    - Section comparisons: 2 sections
+    - Team comparisons (Q&A only): 2 teams (management vs external)
+
+3. Analyzing Attribution Outcome Distributions
+================================================================================
+
+  📊 Overall Attribution Distribution (n=269,686):
+    Positive-Internal   : 125,727 ( 46.6%)
+    Other               : 71,222 ( 26.4%)
+    Positive-External   : 27,779 ( 10.3%)
+    Negative-External   : 25,768 (  9.6%)
+    Negative-Internal   : 19,190 (  7.1%)
+
+  📚 Comparison to Literature (using normalized 4-way percentages):
+    NOTE: Normalized percentages exclude 'Other/Unknown' category to match literature
+    Positive-Internal: 63.4% (Literature: 69-82%)
+      ⚠️  Outside expected range
+    Negative-External: 13.0% (Literature: 5-14%)
+      ✓ Within expected range
+
+  🎯 Target vs Peer Comparison (using normalized 4-way percentages):
+    Targets: n=50,244, Peers: n=219,442
+    Positive-Internal   : Target  64.3% vs Peer  63.1% (↑  1.2%)
+    Positive-External   : Target  11.3% vs Peer  14.6% (↓  3.4%)
+    Negative-Internal   : Target  12.0% vs Peer   9.1% (↑  2.9%)
+    Negative-External   : Target  12.4% vs Peer  13.1% (↓  0.7%)
+
+  ✓ Saved enhanced comparison charts to output\gpt_classification_validation\visualizations
+    - sab_proportion_by_period.png (4-bar comparison)
+    - sab_proportion_histogram.png (distribution analysis)
+    - attribution_rates_histogram.png (component distributions)
+
+3. Calculating Multi-Level Bias Metrics
+================================================================================
+
+Calculating full level metrics...
+  full: 3216 company-quarters
+
+Calculating management level metrics...
+  management: 3195 company-quarters
+
+Calculating prepared level metrics...
+  prepared: 3170 company-quarters
+
+Aggregate Attribution Statistics:
+================================================================================
+
+📊 OVERALL BREAKDOWN (All Companies, All Quarters)
+  Total observations: 3,216 company-quarters
+  Targets: 551 (17.1%)
+  Peers: 2,665 (82.9%)
+
+✓ POSITIVE INTERNAL ATTRIBUTION (taking credit)
+  Targets: 23,964 occurrences (47.7% of target attributions)
+           Mean rate per quarter: 78.3%
+  Peers:   101,763 occurrences (46.4% of peer attributions)
+           Mean rate per quarter: 73.1%
+
+✓ NEGATIVE EXTERNAL ATTRIBUTION (blaming outside factors)
+  Targets: 4,624 occurrences (9.2% of target attributions)
+           Mean rate per quarter: 43.9%
+  Peers:   21,144 occurrences (9.6% of peer attributions)
+           Mean rate per quarter: 51.9%
+
+📊 PRIMARY METRIC: SAB PROPORTION
+  Calculation: (Pos-Int + Neg-Ext) / All Attributions
+  Range: 0% to 100%
+  Interpretation: Higher % = more self-serving bias
+               This is the KEY METRIC for bias detection (absolute proportion)
+
+  🎯 Comparison: Targets show HIGHER SAB proportion than peers (↑ 0.020)
+
+  Targets: Mean 0.582, Median 0.580
+           Range: 0.000 to 1.000
+  Peers:   Mean 0.562, Median 0.561
+           Range: 0.000 to 1.000
+
+📈 SECONDARY METRIC: ATTRIBUTION RATE ASYMMETRY
+  Calculation: (Pos-Int rate + Neg-Ext rate) - (Pos-Ext rate + Neg-Int rate)
+  Range: -2.0 to +2.0
+  Interpretation: +ve = self-serving bias, -ve = reverse bias, 0 = balanced
+               NOTE: This measures the imbalance/asymmetry between rate pairs
+               SAB Proportion remains the primary metric for hypothesis testing
+
+  🎯 Comparison: Rate asymmetry difference = -0.062
+
+  Targets: Mean 0.655, Median 0.609
+           Range: -1.000 to 2.000
+  Peers:   Mean 0.716, Median 0.729
+           Range: -1.000 to 2.000
+
+⚠ HIGH BIAS PERIODS (top 25% asymmetry)
+  106 target company-quarters show elevated bias
+  Most frequent targets:
+    0LIU.L: 17/28 quarters (61%)
+    OTRK: 16/19 quarters (84%)
+    SNAP: 10/26 quarters (38%)
+    GRPN: 8/49 quarters (16%)
+    BHC.TO: 6/28 quarters (21%)
+
+4. Calculating Rolling Window Metrics
+================================================================================
+Calculated rolling metrics for 3216 observations
+
+📈 Creating Rolling Time Series Visualizations
+================================================================================
+  Creating enhanced time series plots for 21 target companies
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0HMI.L (ticker: BBBY)
+         Shading bias period from position 12 to 20 (2020Q2 to 2022Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0II3.L (ticker: EFX)
+         Shading bias period from position 15 to 18 (2017Q4 to 2018Q3)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0IJN.L (ticker: EXC)
+         Shading bias period from position 11 to 11 (2023Q1 to 2023Q1)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0JRL.L (ticker: KSS)
+         Shading bias period from position 10 to 10 (2024Q3 to 2024Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0LIU.L (ticker: UAL)
+         Shading bias period from position 13 to 14 (2017Q2 to 2017Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for 0R0P.L (ticker: 0R0P.L)
+         Shading bias period from position 3 to 6 (2012Q4 to 2013Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BHC.TO (ticker: BHC)
+         Shading bias period from position 15 to 18 (2015Q4 to 2016Q3)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for BOE.L (ticker: BA)
+         Shading bias period from position 13 to 19 (2019Q2 to 2020Q4)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for GRPN (ticker: GRPN)
+         Shading bias period from position 4 to 6 (2013Q1 to 2013Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for HOOD (ticker: HOOD)
+         Shading bias period from position 1 to 5 (2021Q3 to 2022Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for INTC (ticker: INTC)
+         Shading bias period from position 38 to 38 (2021Q3 to 2021Q3)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for KBNT (ticker: KBNT)
+         Shading bias period from start to position 12 (started before data)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NKLA (ticker: NKLA)
+         Shading bias period from position 2 to 6 (2020Q4 to 2021Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for NWT.DE (ticker: WFC)
+         Shading bias period from position 15 to 15 (2016Q4 to 2016Q4)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for OTRK (ticker: OTRK)
+         Shading bias period from position 4 to 4 (2021Q1 to 2021Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for PTON (ticker: PTON)
+         Shading bias period from position 7 to 8 (2021Q4 to 2022Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for RNO.PA (ticker: RNO.PA)
+         Shading bias period from position 10 to 11 (2018Q4 to 2019Q1)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for SNAP (ticker: SNAP)
+         Shading bias period from position 19 to 21 (2022Q1 to 2022Q4)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TL0.DE (ticker: TSLA)
+         Shading bias period from position 14 to 14 (2018Q3 to 2018Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for TWTR (ticker: TWTR)
+         Shading bias period from position 19 to 23 (2018Q3 to 2019Q3)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+      → Found bias period for VOW3.DE (ticker: VOW3.DE)
+         Shading bias period from position 13 to 15 (2015Q4 to 2016Q4)
+  ✓ Created 21 comprehensive time series visualizations
+  ✓ Saved to: output\gpt_classification_validation\visualizations
+
+================================================================================
+BIAS PERIOD VALIDATION
+================================================================================
+Running validation across 6 window sizes (exact, ±1Q, ±2Q, ±4Q, -4Q pre, +4Q post)
+
+📊 Bias Period Validation: Target vs Peers (Same Period, exact)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 20 target companies with bias periods
+
+  ✓ Analyzed 66 bias period quarters across 20 targets
+    asymmetry_score: Mean z-score=0.06, Significant differences=0/66
+    sab_proportion: Mean z-score=-0.94, Significant differences=0/66
+
+📊 Bias Period Validation: Target Bias vs Target Normal (exact)
+================================================================================
+  ✓ Analyzed 20 targets
+    asymmetry_score: 2/20 targets show significant change
+    sab_proportion: 3/20 targets show significant change
+
+📊 Bias Period Validation: Target vs Peers (Same Period, window1)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 20 target companies with bias periods
+
+  ✓ Analyzed 54 bias period quarters across 20 targets
+    asymmetry_score: Mean z-score=-0.02, Significant differences=0/54
+    sab_proportion: Mean z-score=-1.63, Significant differences=0/54
+
+📊 Bias Period Validation: Target Bias vs Target Normal (window1)
+================================================================================
+  ✓ Analyzed 20 targets
+    asymmetry_score: 3/20 targets show significant change
+    sab_proportion: 3/20 targets show significant change
+
+📊 Bias Period Validation: Target vs Peers (Same Period, window2)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 20 target companies with bias periods
+
+  ✓ Analyzed 91 bias period quarters across 20 targets
+    asymmetry_score: Mean z-score=0.05, Significant differences=0/91
+    sab_proportion: Mean z-score=-0.87, Significant differences=0/91
+
+📊 Bias Period Validation: Target Bias vs Target Normal (window2)
+================================================================================
+  ✓ Analyzed 20 targets
+    asymmetry_score: 1/20 targets show significant change
+    sab_proportion: 5/20 targets show significant change
+
+📊 Bias Period Validation: Target vs Peers (Same Period, window4)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 21 target companies with bias periods
+
+  ✓ Analyzed 157 bias period quarters across 21 targets
+    asymmetry_score: Mean z-score=-0.03, Significant differences=0/157
+    sab_proportion: Mean z-score=-0.73, Significant differences=0/157
+
+📊 Bias Period Validation: Target Bias vs Target Normal (window4)
+================================================================================
+  ✓ Analyzed 21 targets
+    asymmetry_score: 3/21 targets show significant change
+    sab_proportion: 5/21 targets show significant change
+
+📊 Bias Period Validation: Target vs Peers (Same Period, pre4)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 21 target companies with bias periods
+
+  ✓ Analyzed 82 bias period quarters across 21 targets
+    asymmetry_score: Mean z-score=-0.06, Significant differences=0/82
+    sab_proportion: Mean z-score=-0.77, Significant differences=0/82
+
+📊 Bias Period Validation: Target Bias vs Target Normal (pre4)
+================================================================================
+  ✓ Analyzed 21 targets
+    asymmetry_score: 4/21 targets show significant change
+    sab_proportion: 3/21 targets show significant change
+
+📊 Bias Period Validation: Target vs Peers (Same Period, post4)
+================================================================================
+  NOTE: Significant = p<0.05, |z|>1.0 (weak), |z|>1.5 (moderate), |z|>2.0 (strong)
+  ✓ Found 20 target companies with bias periods
+
+  ✓ Analyzed 92 bias period quarters across 20 targets
+    asymmetry_score: Mean z-score=0.13, Significant differences=0/92
+    sab_proportion: Mean z-score=-0.69, Significant differences=0/92
+
+📊 Bias Period Validation: Target Bias vs Target Normal (post4)
+================================================================================
+  ✓ Analyzed 20 targets
+    asymmetry_score: 3/20 targets show significant change
+    sab_proportion: 5/20 targets show significant change
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (20 targets)
+    asymmetry_score:
+      Mean z-score: 0.06
+      Elevated (z>1.0): 11/66 quarters (16.7%)
+      Strong (z>2.0): 5/66 quarters
+    sab_proportion:
+      Mean z-score: -0.94
+      Elevated (z>1.0): 5/66 quarters (7.6%)
+      Strong (z>2.0): 2/66 quarters
+    neg_ext_of_negative:
+      Mean z-score: 0.16
+      Elevated (z>1.0): 10/66 quarters (15.2%)
+      Strong (z>2.0): 3/66 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.84
+      Elevated (z>1.0): 8/66 quarters (12.1%)
+      Strong (z>2.0): 4/66 quarters
+
+  📊 Within-Target Analysis (20 targets)
+    asymmetry_score:
+      Significant changes: 2/20 targets (10.0%)
+      Mean difference: +0.036
+    sab_proportion:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.021
+    neg_ext_of_negative:
+      Significant changes: 1/20 targets (5.0%)
+      Mean difference: +0.026
+    pos_int_of_positive:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.006
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (20 targets)
+    asymmetry_score:
+      Mean z-score: -0.02
+      Elevated (z>1.0): 9/54 quarters (16.7%)
+      Strong (z>2.0): 2/54 quarters
+    sab_proportion:
+      Mean z-score: -1.63
+      Elevated (z>1.0): 3/54 quarters (5.6%)
+      Strong (z>2.0): 0/54 quarters
+    neg_ext_of_negative:
+      Mean z-score: -0.10
+      Elevated (z>1.0): 9/54 quarters (16.7%)
+      Strong (z>2.0): 1/54 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.71
+      Elevated (z>1.0): 8/54 quarters (14.8%)
+      Strong (z>2.0): 4/54 quarters
+
+  📊 Within-Target Analysis (20 targets)
+    asymmetry_score:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.034
+    sab_proportion:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.044
+    neg_ext_of_negative:
+      Significant changes: 4/20 targets (20.0%)
+      Mean difference: -0.014
+    pos_int_of_positive:
+      Significant changes: 6/20 targets (30.0%)
+      Mean difference: -0.003
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (20 targets)
+    asymmetry_score:
+      Mean z-score: 0.05
+      Elevated (z>1.0): 15/91 quarters (16.5%)
+      Strong (z>2.0): 4/91 quarters
+    sab_proportion:
+      Mean z-score: -0.87
+      Elevated (z>1.0): 11/91 quarters (12.1%)
+      Strong (z>2.0): 3/91 quarters
+    neg_ext_of_negative:
+      Mean z-score: -0.05
+      Elevated (z>1.0): 12/91 quarters (13.2%)
+      Strong (z>2.0): 2/91 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.30
+      Elevated (z>1.0): 14/91 quarters (15.4%)
+      Strong (z>2.0): 5/91 quarters
+
+  📊 Within-Target Analysis (20 targets)
+    asymmetry_score:
+      Significant changes: 1/20 targets (5.0%)
+      Mean difference: -0.002
+    sab_proportion:
+      Significant changes: 5/20 targets (25.0%)
+      Mean difference: -0.021
+    neg_ext_of_negative:
+      Significant changes: 6/20 targets (30.0%)
+      Mean difference: -0.006
+    pos_int_of_positive:
+      Significant changes: 5/20 targets (25.0%)
+      Mean difference: +0.010
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (21 targets)
+    asymmetry_score:
+      Mean z-score: -0.03
+      Elevated (z>1.0): 22/157 quarters (14.0%)
+      Strong (z>2.0): 6/157 quarters
+    sab_proportion:
+      Mean z-score: -0.73
+      Elevated (z>1.0): 20/157 quarters (12.7%)
+      Strong (z>2.0): 7/157 quarters
+    neg_ext_of_negative:
+      Mean z-score: -0.16
+      Elevated (z>1.0): 16/157 quarters (10.2%)
+      Strong (z>2.0): 3/157 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.44
+      Elevated (z>1.0): 28/157 quarters (17.8%)
+      Strong (z>2.0): 13/157 quarters
+
+  📊 Within-Target Analysis (21 targets)
+    asymmetry_score:
+      Significant changes: 3/21 targets (14.3%)
+      Mean difference: -0.025
+    sab_proportion:
+      Significant changes: 5/21 targets (23.8%)
+      Mean difference: -0.018
+    neg_ext_of_negative:
+      Significant changes: 5/21 targets (23.8%)
+      Mean difference: -0.021
+    pos_int_of_positive:
+      Significant changes: 4/21 targets (19.0%)
+      Mean difference: +0.005
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (21 targets)
+    asymmetry_score:
+      Mean z-score: -0.06
+      Elevated (z>1.0): 12/82 quarters (14.6%)
+      Strong (z>2.0): 4/82 quarters
+    sab_proportion:
+      Mean z-score: -0.77
+      Elevated (z>1.0): 14/82 quarters (17.1%)
+      Strong (z>2.0): 4/82 quarters
+    neg_ext_of_negative:
+      Mean z-score: -0.28
+      Elevated (z>1.0): 10/82 quarters (12.2%)
+      Strong (z>2.0): 2/82 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.37
+      Elevated (z>1.0): 15/82 quarters (18.3%)
+      Strong (z>2.0): 10/82 quarters
+
+  📊 Within-Target Analysis (21 targets)
+    asymmetry_score:
+      Significant changes: 4/21 targets (19.0%)
+      Mean difference: -0.029
+    sab_proportion:
+      Significant changes: 3/21 targets (14.3%)
+      Mean difference: -0.006
+    neg_ext_of_negative:
+      Significant changes: 3/21 targets (14.3%)
+      Mean difference: -0.029
+    pos_int_of_positive:
+      Significant changes: 6/21 targets (28.6%)
+      Mean difference: +0.013
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Aggregating Validation Results
+================================================================================
+
+  📈 Target vs Peer Analysis (20 targets)
+    asymmetry_score:
+      Mean z-score: 0.13
+      Elevated (z>1.0): 14/92 quarters (15.2%)
+      Strong (z>2.0): 4/92 quarters
+    sab_proportion:
+      Mean z-score: -0.69
+      Elevated (z>1.0): 8/92 quarters (8.7%)
+      Strong (z>2.0): 3/92 quarters
+    neg_ext_of_negative:
+      Mean z-score: 0.10
+      Elevated (z>1.0): 10/92 quarters (10.9%)
+      Strong (z>2.0): 2/92 quarters
+    pos_int_of_positive:
+      Mean z-score: -0.42
+      Elevated (z>1.0): 15/92 quarters (16.3%)
+      Strong (z>2.0): 5/92 quarters
+
+  📊 Within-Target Analysis (20 targets)
+    asymmetry_score:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.012
+    sab_proportion:
+      Significant changes: 5/20 targets (25.0%)
+      Mean difference: -0.030
+    neg_ext_of_negative:
+      Significant changes: 4/20 targets (20.0%)
+      Mean difference: -0.002
+    pos_int_of_positive:
+      Significant changes: 3/20 targets (15.0%)
+      Mean difference: -0.007
+
+  🎯 Overall Validation: Weak/No Support
+
+📊 Analyzing Results by Bias Type
+================================================================================
+  ✓ Analyzed 3 bias types
+
+  Overconfidence (n=18, targets=5):
+    Mean asymmetry: 0.586
+    Mean SAB proportion: 56.1%
+
+  Blame/Defensiveness/Evasion (n=35, targets=12):
+    Mean asymmetry: 0.675
+    Mean SAB proportion: 57.1%
+
+  Deception/Misleading (n=13, targets=4):
+    Mean asymmetry: 0.806
+    Mean SAB proportion: 49.2%
+
+6. Analyzing Metadata Distribution in Bias Periods
+================================================================================
+
+Bias Metadata Distribution:
+  Mean attribution confidence in bias periods: 87.2%
+  Mean Q&A percentage in bias periods: 0.0%
+
+8. Comparing Targets vs Peers (with Quarter ±1 Matching)
+================================================================================
+NOTE: Compares each target quarter to peers in same quarter ±1
+      Accounts for fiscal calendar differences and reporting delays
+
+✓ Results:
+  Targets analyzed: 21
+  Total quarters analyzed: 533
+  High bias periods (|z| > 1.0): 207
+
+================================================================================
+PER-TARGET DIAGNOSTIC BREAKDOWN
+================================================================================
+
+🎯 TARGET: 0HMI.L
+   Quarters analyzed: 21
+   High bias quarters: 6 (29%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2019 Q3: z-score=-1.30, asymmetry=0.173 vs peers=0.733
+                 → Reverse bias (positive external + negative internal)
+      2019 Q4: z-score=-1.12, asymmetry=0.342 vs peers=0.784
+                 → Reverse bias (positive external + negative internal)
+      2021 Q1: z-score=-1.80, asymmetry=0.386 vs peers=1.045
+                 → Reverse bias (positive external + negative internal)
+      2021 Q3: z-score=-1.01, asymmetry=0.732 vs peers=1.058
+                 → Reverse bias (positive external + negative internal)
+      2021 Q4: z-score=-1.64, asymmetry=0.571 vs peers=1.049
+                 → Reverse bias (positive external + negative internal)
+      2022 Q2: z-score=-4.50, asymmetry=-0.409 vs peers=1.062
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: 0II3.L
+   Quarters analyzed: 28
+   High bias quarters: 5 (18%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2014 Q2: z-score=+2.56, asymmetry=1.228 vs peers=0.186
+                 → Self-serving bias (positive internal + negative external)
+      2014 Q3: z-score=+1.54, asymmetry=0.978 vs peers=0.319
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q1: z-score=+1.53, asymmetry=0.867 vs peers=0.415
+                 → Self-serving bias (positive internal + negative external)
+      2016 Q3: z-score=+1.54, asymmetry=1.197 vs peers=0.697
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q4: z-score=-2.33, asymmetry=0.106 vs peers=0.915
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: 0IJN.L
+   Quarters analyzed: 19
+   High bias quarters: 6 (32%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2020 Q1: z-score=+1.32, asymmetry=1.267 vs peers=0.849
+                 → Self-serving bias (positive internal + negative external)
+      2021 Q3: z-score=-1.23, asymmetry=0.152 vs peers=0.650
+                 → Reverse bias (positive external + negative internal)
+      2022 Q2: z-score=+1.80, asymmetry=1.389 vs peers=0.564
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q4: z-score=+1.23, asymmetry=1.103 vs peers=0.617
+                 → Self-serving bias (positive internal + negative external)
+      2023 Q1: z-score=+1.42, asymmetry=1.212 vs peers=0.633
+                 → Self-serving bias (positive internal + negative external)
+      2024 Q3: z-score=+1.62, asymmetry=1.318 vs peers=0.617
+                 → Self-serving bias (positive internal + negative external)
+
+🎯 TARGET: 0JRL.L
+   Quarters analyzed: 11
+   High bias quarters: 2 (18%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2023 Q1: z-score=-1.04, asymmetry=0.318 vs peers=0.864
+                 → Reverse bias (positive external + negative internal)
+      2024 Q3: z-score=-1.15, asymmetry=0.471 vs peers=0.881
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: 0LIU.L
+   Quarters analyzed: 28
+   High bias quarters: 11 (39%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.22)
+
+   HIGH BIAS QUARTERS:
+      2014 Q1: z-score=+2.21, asymmetry=1.224 vs peers=0.804
+                 → Self-serving bias (positive internal + negative external)
+      2014 Q2: z-score=+1.70, asymmetry=1.250 vs peers=0.683
+                 → Self-serving bias (positive internal + negative external)
+      2014 Q3: z-score=+4.47, asymmetry=2.000 vs peers=0.611
+                 → Self-serving bias (positive internal + negative external)
+      2014 Q4: z-score=+2.23, asymmetry=1.455 vs peers=0.649
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q3: z-score=+2.28, asymmetry=1.800 vs peers=0.942
+                 → Self-serving bias (positive internal + negative external)
+      2016 Q3: z-score=-1.17, asymmetry=0.418 vs peers=0.779
+                 → Reverse bias (positive external + negative internal)
+      2018 Q2: z-score=-1.01, asymmetry=0.595 vs peers=0.927
+                 → Reverse bias (positive external + negative internal)
+      2019 Q4: z-score=+1.28, asymmetry=1.111 vs peers=0.729
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q1: z-score=+1.53, asymmetry=1.053 vs peers=0.653
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q2: z-score=+2.55, asymmetry=1.194 vs peers=0.560
+                 → Self-serving bias (positive internal + negative external)
+      ... and 1 more quarters
+
+🎯 TARGET: 0R0P.L
+   Quarters analyzed: 51
+   High bias quarters: 37 (73%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (3.30)
+
+   HIGH BIAS QUARTERS:
+      2013 Q2: z-score=+1.76, asymmetry=0.794 vs peers=0.533
+                 → Self-serving bias (positive internal + negative external)
+      2013 Q3: z-score=+6.51, asymmetry=0.847 vs peers=0.470
+                 → Self-serving bias (positive internal + negative external)
+      2013 Q4: z-score=-9.21, asymmetry=-0.065 vs peers=0.470
+                 → Reverse bias (positive external + negative internal)
+      2014 Q1: z-score=+1.71, asymmetry=0.955 vs peers=0.199
+                 → Self-serving bias (positive internal + negative external)
+      2014 Q4: z-score=-2.13, asymmetry=0.156 vs peers=0.721
+                 → Reverse bias (positive external + negative internal)
+      2015 Q1: z-score=+1.14, asymmetry=0.854 vs peers=0.647
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q2: z-score=+5.93, asymmetry=0.826 vs peers=0.752
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q3: z-score=-9.74, asymmetry=0.133 vs peers=0.702
+                 → Reverse bias (positive external + negative internal)
+      2015 Q4: z-score=-4.51, asymmetry=-0.186 vs peers=0.819
+                 → Reverse bias (positive external + negative internal)
+      2016 Q2: z-score=-6.56, asymmetry=0.064 vs peers=0.844
+                 → Reverse bias (positive external + negative internal)
+      ... and 27 more quarters
+
+🎯 TARGET: BHC.TO
+   Quarters analyzed: 28
+   High bias quarters: 7 (25%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2013 Q2: z-score=+1.16, asymmetry=1.134 vs peers=0.749
+                 → Self-serving bias (positive internal + negative external)
+      2013 Q3: z-score=-1.56, asymmetry=0.307 vs peers=0.863
+                 → Reverse bias (positive external + negative internal)
+      2014 Q4: z-score=-1.88, asymmetry=0.100 vs peers=0.914
+                 → Reverse bias (positive external + negative internal)
+      2015 Q2: z-score=-1.22, asymmetry=0.236 vs peers=0.944
+                 → Reverse bias (positive external + negative internal)
+      2015 Q4: z-score=-1.83, asymmetry=0.289 vs peers=0.961
+                 → Reverse bias (positive external + negative internal)
+      2016 Q1: z-score=-1.24, asymmetry=0.506 vs peers=0.895
+                 → Reverse bias (positive external + negative internal)
+      2017 Q2: z-score=-1.69, asymmetry=0.324 vs peers=0.971
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: BOE.L
+   Quarters analyzed: 28
+   High bias quarters: 10 (36%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.02)
+
+   HIGH BIAS QUARTERS:
+      2016 Q1: z-score=-1.42, asymmetry=0.100 vs peers=0.816
+                 → Reverse bias (positive external + negative internal)
+      2017 Q1: z-score=-1.27, asymmetry=-0.130 vs peers=0.495
+                 → Reverse bias (positive external + negative internal)
+      2017 Q3: z-score=+1.38, asymmetry=0.796 vs peers=0.366
+                 → Self-serving bias (positive internal + negative external)
+      2017 Q4: z-score=+1.86, asymmetry=1.027 vs peers=0.327
+                 → Self-serving bias (positive internal + negative external)
+      2018 Q3: z-score=-1.02, asymmetry=-0.248 vs peers=0.441
+                 → Reverse bias (positive external + negative internal)
+      2021 Q3: z-score=-3.64, asymmetry=-0.188 vs peers=0.706
+                 → Reverse bias (positive external + negative internal)
+      2021 Q4: z-score=-3.07, asymmetry=-0.160 vs peers=0.693
+                 → Reverse bias (positive external + negative internal)
+      2022 Q2: z-score=-2.39, asymmetry=-0.054 vs peers=0.770
+                 → Reverse bias (positive external + negative internal)
+      2022 Q3: z-score=-1.59, asymmetry=0.175 vs peers=0.711
+                 → Reverse bias (positive external + negative internal)
+      2022 Q4: z-score=-1.22, asymmetry=0.271 vs peers=0.720
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: GRPN
+   Quarters analyzed: 49
+   High bias quarters: 30 (61%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (2.34)
+
+   HIGH BIAS QUARTERS:
+      2012 Q1: z-score=-1.48, asymmetry=0.283 vs peers=1.018
+                 → Reverse bias (positive external + negative internal)
+      2012 Q2: z-score=+1.06, asymmetry=1.234 vs peers=0.839
+                 → Self-serving bias (positive internal + negative external)
+      2012 Q3: z-score=+1.53, asymmetry=0.950 vs peers=0.594
+                 → Self-serving bias (positive internal + negative external)
+      2012 Q4: z-score=-2.83, asymmetry=0.111 vs peers=0.686
+                 → Reverse bias (positive external + negative internal)
+      2013 Q1: z-score=-1.59, asymmetry=0.196 vs peers=0.805
+                 → Reverse bias (positive external + negative internal)
+      2013 Q2: z-score=-3.52, asymmetry=0.124 vs peers=0.983
+                 → Reverse bias (positive external + negative internal)
+      2013 Q3: z-score=-4.60, asymmetry=0.492 vs peers=1.073
+                 → Reverse bias (positive external + negative internal)
+      2014 Q1: z-score=-3.32, asymmetry=-0.072 vs peers=0.812
+                 → Reverse bias (positive external + negative internal)
+      2014 Q2: z-score=-2.26, asymmetry=0.153 vs peers=0.838
+                 → Reverse bias (positive external + negative internal)
+      2014 Q4: z-score=-7.38, asymmetry=0.561 vs peers=1.117
+                 → Reverse bias (positive external + negative internal)
+      ... and 20 more quarters
+
+🎯 TARGET: HOOD
+   Quarters analyzed: 15
+   High bias quarters: 2 (13%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2022 Q4: z-score=-1.72, asymmetry=0.554 vs peers=1.075
+                 → Reverse bias (positive external + negative internal)
+      2024 Q1: z-score=+1.64, asymmetry=1.374 vs peers=0.514
+                 → Self-serving bias (positive internal + negative external)
+
+🎯 TARGET: INTC
+   Quarters analyzed: 52
+   High bias quarters: 10 (19%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2017 Q3: z-score=-1.95, asymmetry=-0.330 vs peers=0.603
+                 → Reverse bias (positive external + negative internal)
+      2018 Q1: z-score=-2.24, asymmetry=-0.256 vs peers=0.678
+                 → Reverse bias (positive external + negative internal)
+      2018 Q3: z-score=+1.68, asymmetry=1.291 vs peers=0.755
+                 → Self-serving bias (positive internal + negative external)
+      2019 Q3: z-score=-1.79, asymmetry=0.071 vs peers=0.776
+                 → Reverse bias (positive external + negative internal)
+      2022 Q2: z-score=-1.44, asymmetry=0.467 vs peers=0.876
+                 → Reverse bias (positive external + negative internal)
+      2023 Q1: z-score=-1.48, asymmetry=0.065 vs peers=0.738
+                 → Reverse bias (positive external + negative internal)
+      2023 Q4: z-score=-1.49, asymmetry=0.167 vs peers=0.764
+                 → Reverse bias (positive external + negative internal)
+      2024 Q1: z-score=-1.11, asymmetry=0.311 vs peers=0.716
+                 → Reverse bias (positive external + negative internal)
+      2024 Q3: z-score=-1.16, asymmetry=0.185 vs peers=0.695
+                 → Reverse bias (positive external + negative internal)
+      2024 Q4: z-score=-1.11, asymmetry=0.197 vs peers=0.714
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: KBNT
+   Quarters analyzed: 13
+   High bias quarters: 7 (54%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.13)
+
+   HIGH BIAS QUARTERS:
+      2021 Q3: z-score=-1.23, asymmetry=0.437 vs peers=0.946
+                 → Reverse bias (positive external + negative internal)
+      2021 Q4: z-score=+2.45, asymmetry=1.839 vs peers=1.006
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q1: z-score=+1.86, asymmetry=1.727 vs peers=1.068
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q2: z-score=-1.73, asymmetry=0.568 vs peers=1.084
+                 → Reverse bias (positive external + negative internal)
+      2022 Q4: z-score=-1.11, asymmetry=0.517 vs peers=1.014
+                 → Reverse bias (positive external + negative internal)
+      2023 Q2: z-score=-1.30, asymmetry=0.497 vs peers=1.046
+                 → Reverse bias (positive external + negative internal)
+      2024 Q1: z-score=-2.09, asymmetry=0.000 vs peers=0.861
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: NKLA
+   Quarters analyzed: 15
+   High bias quarters: 6 (40%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.05)
+
+   HIGH BIAS QUARTERS:
+      2021 Q1: z-score=+1.73, asymmetry=0.831 vs peers=0.422
+                 → Self-serving bias (positive internal + negative external)
+      2021 Q2: z-score=+2.62, asymmetry=1.533 vs peers=0.518
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q1: z-score=+2.49, asymmetry=1.818 vs peers=0.620
+                 → Self-serving bias (positive internal + negative external)
+      2023 Q1: z-score=-1.61, asymmetry=0.029 vs peers=0.602
+                 → Reverse bias (positive external + negative internal)
+      2023 Q2: z-score=-2.20, asymmetry=0.032 vs peers=0.692
+                 → Reverse bias (positive external + negative internal)
+      2023 Q4: z-score=-1.16, asymmetry=0.131 vs peers=0.629
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: NWT.DE
+   Quarters analyzed: 28
+   High bias quarters: 5 (18%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2013 Q2: z-score=-1.33, asymmetry=0.166 vs peers=0.468
+                 → Reverse bias (positive external + negative internal)
+      2014 Q1: z-score=-2.34, asymmetry=-0.282 vs peers=0.342
+                 → Reverse bias (positive external + negative internal)
+      2014 Q3: z-score=+2.94, asymmetry=0.930 vs peers=0.364
+                 → Self-serving bias (positive internal + negative external)
+      2017 Q2: z-score=+1.19, asymmetry=0.872 vs peers=0.437
+                 → Self-serving bias (positive internal + negative external)
+      2019 Q2: z-score=-1.08, asymmetry=0.337 vs peers=0.607
+                 → Reverse bias (positive external + negative internal)
+
+🎯 TARGET: OTRK
+   Quarters analyzed: 19
+   High bias quarters: 11 (58%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.20)
+
+   HIGH BIAS QUARTERS:
+      2020 Q1: z-score=+1.51, asymmetry=1.377 vs peers=0.839
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q2: z-score=+2.95, asymmetry=1.575 vs peers=0.788
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q4: z-score=+1.10, asymmetry=1.454 vs peers=0.994
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q2: z-score=+1.86, asymmetry=1.500 vs peers=0.719
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q3: z-score=+2.25, asymmetry=1.692 vs peers=0.643
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q4: z-score=+1.03, asymmetry=1.385 vs peers=0.826
+                 → Self-serving bias (positive internal + negative external)
+      2023 Q1: z-score=+1.31, asymmetry=1.682 vs peers=0.979
+                 → Self-serving bias (positive internal + negative external)
+      2023 Q2: z-score=+1.20, asymmetry=1.706 vs peers=1.103
+                 → Self-serving bias (positive internal + negative external)
+      2023 Q3: z-score=+1.70, asymmetry=2.000 vs peers=1.208
+                 → Self-serving bias (positive internal + negative external)
+      2024 Q2: z-score=+1.36, asymmetry=1.867 vs peers=1.067
+                 → Self-serving bias (positive internal + negative external)
+      ... and 1 more quarters
+
+🎯 TARGET: PTON
+   Quarters analyzed: 15
+   High bias quarters: 6 (40%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (2.77)
+
+   HIGH BIAS QUARTERS:
+      2021 Q2: z-score=+27.83, asymmetry=0.705 vs peers=0.676
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q2: z-score=-1.48, asymmetry=0.407 vs peers=1.189
+                 → Reverse bias (positive external + negative internal)
+      2022 Q3: z-score=-1.20, asymmetry=0.121 vs peers=0.924
+                 → Reverse bias (positive external + negative internal)
+      2023 Q3: z-score=+3.65, asymmetry=2.000 vs peers=0.397
+                 → Self-serving bias (positive internal + negative external)
+      2024 Q2: z-score=-2.21, asymmetry=-1.000 vs peers=0.516
+                 → Reverse bias (positive external + negative internal)
+      2024 Q3: z-score=+1.75, asymmetry=0.529 vs peers=0.213
+                 → Self-serving bias (positive internal + negative external)
+
+🎯 TARGET: RNO.PA
+   Quarters analyzed: 18
+   High bias quarters: 4 (22%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2013 Q4: z-score=+1.20, asymmetry=0.891 vs peers=0.577
+                 → Self-serving bias (positive internal + negative external)
+      2018 Q4: z-score=+1.42, asymmetry=1.068 vs peers=0.699
+                 → Self-serving bias (positive internal + negative external)
+      2019 Q1: z-score=+1.08, asymmetry=0.887 vs peers=0.533
+                 → Self-serving bias (positive internal + negative external)
+      2019 Q3: z-score=+1.03, asymmetry=0.946 vs peers=0.579
+                 → Self-serving bias (positive internal + negative external)
+
+🎯 TARGET: SNAP
+   Quarters analyzed: 26
+   High bias quarters: 11 (42%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (1.17)
+
+   HIGH BIAS QUARTERS:
+      2017 Q4: z-score=+6.91, asymmetry=1.791 vs peers=0.202
+                 → Self-serving bias (positive internal + negative external)
+      2018 Q2: z-score=-1.46, asymmetry=-0.122 vs peers=0.568
+                 → Reverse bias (positive external + negative internal)
+      2018 Q3: z-score=-1.36, asymmetry=0.116 vs peers=0.623
+                 → Reverse bias (positive external + negative internal)
+      2018 Q4: z-score=-1.26, asymmetry=-0.103 vs peers=0.547
+                 → Reverse bias (positive external + negative internal)
+      2020 Q1: z-score=-1.01, asymmetry=1.028 vs peers=1.213
+                 → Reverse bias (positive external + negative internal)
+      2020 Q3: z-score=+2.01, asymmetry=1.806 vs peers=0.988
+                 → Self-serving bias (positive internal + negative external)
+      2021 Q1: z-score=-2.80, asymmetry=0.659 vs peers=1.220
+                 → Reverse bias (positive external + negative internal)
+      2021 Q2: z-score=+2.15, asymmetry=1.797 vs peers=1.251
+                 → Self-serving bias (positive internal + negative external)
+      2021 Q4: z-score=+1.52, asymmetry=1.807 vs peers=1.302
+                 → Self-serving bias (positive internal + negative external)
+      2022 Q2: z-score=-1.71, asymmetry=0.667 vs peers=1.298
+                 → Reverse bias (positive external + negative internal)
+      ... and 1 more quarters
+
+🎯 TARGET: TL0.DE
+   Quarters analyzed: 15
+   High bias quarters: 8 (53%)
+
+   BIAS SIGNALS DETECTED (1/2):
+      ✓ High Z-Score (3.24)
+
+   HIGH BIAS QUARTERS:
+      2018 Q4: z-score=-1.31, asymmetry=0.537 vs peers=0.982
+                 → Reverse bias (positive external + negative internal)
+      2019 Q1: z-score=-1.75, asymmetry=0.492 vs peers=0.848
+                 → Reverse bias (positive external + negative internal)
+      2019 Q3: z-score=-33.79, asymmetry=0.325 vs peers=0.887
+                 → Reverse bias (positive external + negative internal)
+      2019 Q4: z-score=-1.56, asymmetry=0.205 vs peers=0.699
+                 → Reverse bias (positive external + negative internal)
+      2020 Q1: z-score=+2.06, asymmetry=1.184 vs peers=0.528
+                 → Self-serving bias (positive internal + negative external)
+      2020 Q2: z-score=+1.11, asymmetry=0.436 vs peers=0.215
+                 → Self-serving bias (positive internal + negative external)
+      2021 Q1: z-score=-1.62, asymmetry=0.444 vs peers=0.862
+                 → Reverse bias (positive external + negative internal)
+      2021 Q4: z-score=+1.16, asymmetry=1.048 vs peers=0.724
+                 → Self-serving bias (positive internal + negative external)
+
+🎯 TARGET: TWTR
+   Quarters analyzed: 33
+   High bias quarters: 13 (39%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2015 Q4: z-score=-1.46, asymmetry=0.036 vs peers=0.720
+                 → Reverse bias (positive external + negative internal)
+      2016 Q2: z-score=+1.08, asymmetry=0.929 vs peers=0.401
+                 → Self-serving bias (positive internal + negative external)
+      2016 Q3: z-score=-1.10, asymmetry=-0.143 vs peers=0.320
+                 → Reverse bias (positive external + negative internal)
+      2016 Q4: z-score=+1.19, asymmetry=0.778 vs peers=0.435
+                 → Self-serving bias (positive internal + negative external)
+      2017 Q1: z-score=-1.16, asymmetry=0.000 vs peers=0.619
+                 → Reverse bias (positive external + negative internal)
+      2017 Q4: z-score=+1.71, asymmetry=0.595 vs peers=0.202
+                 → Self-serving bias (positive internal + negative external)
+      2018 Q1: z-score=+1.09, asymmetry=0.962 vs peers=0.451
+                 → Self-serving bias (positive internal + negative external)
+      2019 Q1: z-score=-1.51, asymmetry=-0.240 vs peers=0.522
+                 → Reverse bias (positive external + negative internal)
+      2019 Q4: z-score=-1.99, asymmetry=0.065 vs peers=1.035
+                 → Reverse bias (positive external + negative internal)
+      2021 Q1: z-score=-2.14, asymmetry=0.792 vs peers=1.220
+                 → Reverse bias (positive external + negative internal)
+      ... and 3 more quarters
+
+🎯 TARGET: VOW3.DE
+   Quarters analyzed: 21
+   High bias quarters: 10 (48%)
+
+   BIAS SIGNALS DETECTED (0/2):
+      No strong bias signals detected
+
+   HIGH BIAS QUARTERS:
+      2012 Q1: z-score=-2.95, asymmetry=0.417 vs peers=0.722
+                 → Reverse bias (positive external + negative internal)
+      2012 Q2: z-score=+1.43, asymmetry=1.010 vs peers=0.746
+                 → Self-serving bias (positive internal + negative external)
+      2012 Q4: z-score=+1.35, asymmetry=1.150 vs peers=0.643
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q1: z-score=+1.91, asymmetry=1.004 vs peers=0.581
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q2: z-score=+1.03, asymmetry=0.902 vs peers=0.638
+                 → Self-serving bias (positive internal + negative external)
+      2015 Q3: z-score=-1.16, asymmetry=0.357 vs peers=0.631
+                 → Reverse bias (positive external + negative internal)
+      2016 Q2: z-score=+1.29, asymmetry=1.004 vs peers=0.635
+                 → Self-serving bias (positive internal + negative external)
+      2017 Q1: z-score=-1.53, asymmetry=0.264 vs peers=0.753
+                 → Reverse bias (positive external + negative internal)
+      2017 Q2: z-score=-2.10, asymmetry=0.223 vs peers=0.824
+                 → Reverse bias (positive external + negative internal)
+      2017 Q4: z-score=+2.24, asymmetry=1.147 vs peers=0.662
+                 → Self-serving bias (positive internal + negative external)
+
+10. Comparing Targets vs Peers (Aggregate)
+================================================================================
+
+✓ Found 21 targets with attribution data:
+  0HMI.L, 0II3.L, 0IJN.L, 0JRL.L, 0LIU.L, 0R0P.L, BHC.TO, BOE.L, GRPN, HOOD, INTC, KBNT, NKLA, NWT.DE, OTRK, PTON, RNO.PA, SNAP, TL0.DE, TWTR, VOW3.DE
+  ✓ 0HMI.L: Found 10/10 peers in data
+  ✓ 0II3.L: Found 7/10 peers in data
+  ✓ 0IJN.L: Found 14/14 peers in data
+  ✓ 0JRL.L: Found 7/8 peers in data
+  ✓ 0LIU.L: Found 4/7 peers in data
+  ✓ 0R0P.L: Found 1/1 peers in data
+  ✓ BHC.TO: Found 5/7 peers in data
+  ✓ BOE.L: Found 5/6 peers in data
+  ✓ GRPN: Found 1/1 peers in data
+  ✓ HOOD: Found 4/5 peers in data
+  ✓ INTC: Found 10/10 peers in data
+  ✓ KBNT: Found 7/7 peers in data
+  ✓ NKLA: Found 5/5 peers in data
+  ✓ NWT.DE: Found 6/6 peers in data
+  ✓ OTRK: Found 6/6 peers in data
+  ✓ PTON: Found 2/2 peers in data
+  ✓ RNO.PA: Found 5/7 peers in data
+  ✓ SNAP: Found 3/15 peers in data
+  ✓ TL0.DE: Found 4/8 peers in data
+  ✓ TWTR: Found 3/4 peers in data
+  ✓ VOW3.DE: Found 7/8 peers in data
+
+✓ Target vs Peer Comparison:
+  Targets analyzed: 21
+  High bias (|z| > 1.0): 7
+  Mean z-score: -0.24
+
+12. Calculating Composite Bias Scores
+================================================================================
+
+Composite Bias Scoring:
+  Extreme Bias (12-15 pts): 0
+  High Bias (8-11 pts): 0
+  Moderate Bias (5-7 pts): 0
+  Low Bias (0-4 pts): 21
+
+================================================================================
+Generating Signal Decomposition Analysis
+================================================================================
+
+================================================================================
+SIGNAL DECOMPOSITION SUMMARY
+================================================================================
+Total targets analyzed: 21
+
+Signal Prevalence Across Targets:
+  High Z: 17/21 targets (81.0%)
+  Mod Z: 16/21 targets (76.2%)
+  High Asymmetry: 10/21 targets (47.6%)
+  Low Cause Overlap: 21/21 targets (100.0%)
+  Low Effect Overlap: 21/21 targets (100.0%)
+  Cause Instability: 21/21 targets (100.0%)
+  Effect Instability: 21/21 targets (100.0%)
+  Suspect Pairs: 0/21 targets (0.0%)
+
+13. Creating Consolidated Excel Workbook
+================================================================================
+
+Generating per-target time-series data...
+  Generated time-series for 21 targets
+
+Creating Excel tabs:
+  - 0_METHODOLOGY
+  - 1_SUMMARY (21 targets)
+  - 2_TARGET_COMPARISON (21 targets)
+  - 13_SIGNAL_DECOMPOSITION
+
+  📊 Adding Bias Validation Tabs:
+  - 14_VALIDATION_EXACT_TvP
+  - 15_VALIDATION_EXACT_BiasVsNormal
+  - 16_VALIDATION_BY_BIAS_TYPE
+  - 17_VALIDATION_W1_TvP
+  - 18_VALIDATION_W1_BvN
+  - 19_VALIDATION_W2_TvP
+  - 20_VALIDATION_W2_BvN
+  - 21_ATTRIBUTION_COMPARISON
+
+Creating per-target tabs:
+  ✓ 0HMI.L: Created timeseries + peers + signals tabs (11 peers)
+  ✓ 0II3.L: Created timeseries + peers + signals tabs (8 peers)
+  ✓ 0IJN.L: Created timeseries + peers + signals tabs (15 peers)
+  ✓ 0JRL.L: Created timeseries + peers + signals tabs (8 peers)
+  ✓ 0LIU.L: Created timeseries + peers + signals tabs (5 peers)
+  ✓ 0R0P.L: Created timeseries + peers + signals tabs (2 peers)
+  ✓ BHC.TO: Created timeseries + peers + signals tabs (6 peers)
+  ✓ BOE.L: Created timeseries + peers + signals tabs (6 peers)
+  ✓ GRPN: Created timeseries + peers + signals tabs (2 peers)
+  ✓ HOOD: Created timeseries + peers + signals tabs (5 peers)
+  ✓ INTC: Created timeseries + peers + signals tabs (11 peers)
+  ✓ KBNT: Created timeseries + peers + signals tabs (8 peers)
+  ✓ NKLA: Created timeseries + peers + signals tabs (6 peers)
+  ✓ NWT.DE: Created timeseries + peers + signals tabs (7 peers)
+  ✓ OTRK: Created timeseries + peers + signals tabs (7 peers)
+  ✓ PTON: Created timeseries + peers + signals tabs (3 peers)
+  ✓ RNO.PA: Created timeseries + peers + signals tabs (6 peers)
+  ✓ SNAP: Created timeseries + peers + signals tabs (4 peers)
+  ✓ TL0.DE: Created timeseries + peers + signals tabs (5 peers)
+  ✓ TWTR: Created timeseries + peers + signals tabs (4 peers)
+  ✓ VOW3.DE: Created timeseries + peers + signals tabs (8 peers)
+✓ Saved consolidated workbook: peer_benchmark_consolidated_20251024_160152.xlsx
+  Total tabs: 84
+  Includes: Methodology, Summary, Signal Decomposition, 11 analysis tabs
+  Plus 63 target-specific tabs (timeseries + peers + signals per target)
+  Main summary tab: 1_SUMMARY (composite scores)
+  Signal analysis tab: 13_SIGNAL_DECOMP (which signals fire for each target)
+  Per-target tabs: T_<company>_timeseries, T_<company>_peers, T_<company>_signals
+
+14. Saving Individual CSV Files
+================================================================================
+Saved: composite_bias_scores_20251024_160152.csv
+Saved: bias_metadata_distribution_20251024_160152.csv
+Saved: quarterly_comparison_with_lag_20251024_160152.csv
+Saved: rolling_metrics_20251024_160152.csv
+Saved: target_peer_comparison_20251024_160152.csv
+Saved: validation_target_vs_peer_exact_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_exact_20251024_160152.csv
+Saved: validation_by_bias_type_exact_20251024_160152.csv
+Saved: validation_target_vs_peer_window1_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_window1_20251024_160152.csv
+Saved: validation_target_vs_peer_window2_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_window2_20251024_160152.csv
+Saved: validation_target_vs_peer_window4_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_window4_20251024_160152.csv
+Saved: validation_target_vs_peer_pre4_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_pre4_20251024_160152.csv
+Saved: validation_target_vs_peer_post4_20251024_160152.csv
+Saved: validation_target_bias_vs_normal_post4_20251024_160152.csv
+Saved: attribution_distribution_comparison_20251024_160152.csv
+Saved: bias_metrics_full_20251024_160152.csv
+Saved: bias_metrics_management_20251024_160152.csv
+Saved: bias_metrics_prepared_20251024_160152.csv
+Saved: target_peer_comparison_latest.csv
+Saved: summary_20251024_160152.json
+Saved: validation_summary_exact_20251024_160152.json
+Saved: validation_summary_window1_20251024_160152.json
+Saved: validation_summary_window2_20251024_160152.json
+Saved: validation_summary_window4_20251024_160152.json
+Saved: validation_summary_pre4_20251024_160152.json
+Saved: validation_summary_post4_20251024_160152.json
+
+✓ Saved visualization PNG files to: output\gpt_classification_validation\visualizations
+  (Generated during distribution analysis)
+
+================================================================================
+ANALYSIS COMPLETE
+================================================================================
+
+Results saved to: output\gpt_classification_validation
+Visualizations saved to: output\gpt_classification_validation\visualizations
+
+✓ Full analysis log saved to: output\gpt_classification_validation\analysis_log_20251024_154516.txt

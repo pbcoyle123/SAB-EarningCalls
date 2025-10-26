@@ -1,0 +1,24 @@
+{
+  "gpt_baseline": {
+    "auc": 0.7185305240410589,
+    "model": "LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)"
+  },
+  "embedding": {
+    "auc": 0.8478300018008283,
+    "model": "LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)"
+  },
+  "combined": {
+    "auc": 0.8603757728555135,
+    "model": "LogisticRegression(class_weight='balanced', max_iter=1000, random_state=42)"
+  },
+  "analysis": {
+    "gpt_auc": 0.7185305240410589,
+    "embedding_auc": 0.8478300018008283,
+    "combined_auc": 0.8603757728555135,
+    "improvement_emb_vs_gpt": 0.12929947775976947,
+    "improvement_comb_vs_gpt": 0.1418452488144546,
+    "hypothesis_confirmed": true,
+    "n_train": 2572,
+    "n_test": 644
+  }
+}

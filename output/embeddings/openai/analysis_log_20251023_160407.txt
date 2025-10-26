@@ -1,0 +1,946 @@
+🔑 OpenAI API key loaded
+📊 Using OpenAI embeddings: text-embedding-3-large
+✓ OpenAI API connection verified
+  Embedding dimension: 3072
+
+Initialized EmbeddingAnalyzer
+  Input: classification_results
+  Config: company_config.json
+  Log file: output\embeddings\analysis_log_20251023_160407.txt
+  Benchmark: output\peer_validation
+  Output: output\embeddings
+  Peer groups loaded: 23
+  Embedding source: OpenAI
+
+================================================================================
+EMBEDDING ANALYSIS WITH PEER BENCHMARK INTEGRATION
+================================================================================
+
+1. Loading Attribution Data with Target/Peer Labels
+================================================================================
+✓ Found 31 instance folders with 05/ subdirectory
+
+✓ Loaded 3435 CSV files
+✓ Found 139 unique companies
+✓ Matched 21 target companies
+✓ Matched 117 peer companies
+
+Data Summary:
+  Total rows before filtering: 942,847
+  After filtering (attribution_present=Y, not filtered_out): 269,686
+  Target company rows: 50,244
+  Peer company rows: 224,553
+  After text length filtering: 269,683 segments
+
+ Loading Peer Benchmark Results
+================================================================================
+✓ Found benchmark file: peer_benchmark_consolidated_20251012_171602.xlsx
+✓ Found 17 target timeseries sheets
+✓ Loaded bias period info for 391 company-quarters
+  High-bias periods (|z| > 1.0): 116
+  Low-bias periods (|z| < 0.5): 154
+  Periods of interest: 227
+
+📋 Loading Expert-Identified Bias Periods
+================================================================================
+  ✓ Extracted expert bias periods for 20 target companies
+    • INTC: Blame/Defensiveness/Evasion starting ('2021', 'Q3')
+    • SNAP: Blame/Defensiveness/Evasion starting ('2022', 'Q1')
+    • BBBY: Overconfidence starting ('2020', 'Q2')
+
+📊 Creating Expert-Labeled Dataset
+================================================================================
+  ✓ Labeled 0 segments as expert high-bias (exact quarter)
+  ✓ Labeled 0 segments in expert bias windows (±2 quarters)
+  → 0.0% exact bias labels
+  → 0.0% in bias windows
+
+2. Extracting Embeddings
+==================================================
+
+✓ Found existing embeddings checkpoint: embeddings_raw_20251021_080627.npy
+  Loaded 269683 embeddings (shape: (269683, 3072))
+  → Using cached embeddings (same number of texts)
+
+================================================================================
+TOPIC ADJUSTMENT - Removing Confound
+================================================================================
+
+Computing topic-adjusted embeddings...
+Goal: Remove topic variance to isolate attribution STYLE
+  ✓ Adjusted 191 topics covering 264,035 samples
+  → Embeddings now capture STYLE of discussion, not topic content
+
+2c. Extracting Semantic Subspaces
+================================================================================
+  Embedding dimensions: 3072
+  Sentiment subspace: dims 399-952
+  Formality subspace: dims 952-1443
+  Certainty subspace: dims 1443-1935
+  Specificity subspace: dims 1935-2396
+  Causality subspace: dims 2396-2887
+
+✓ Extracted 7 subspace features
+
+Subspace feature statistics:
+                       count      mean       std       min       25%       50%       75%       max
+sentiment_strength  269683.0  0.502940  0.012239  0.447175  0.494722  0.502979  0.511152  0.557581
+causality_strength  269683.0  0.313159  0.009575  0.273587  0.306631  0.312995  0.319482  0.355709
+certainty_strength  269683.0  0.327251  0.010195  0.279781  0.320383  0.327252  0.334150  0.373602
+
+2b. Aggregating Multi-Level Embeddings
+================================================================================
+
+  Level 1: Attribution-Type Aggregation
+    ✓ Aggregated 15687 attribution-type groups
+
+  Level 2: Section Aggregation
+    ✓ Aggregated 6321 section groups
+
+  Level 3: Attribution vs Non-Attribution
+    ✓ Aggregated 3216 attribution/non-attribution groups
+
+  Level 4: Company-Quarter Aggregation
+    ✓ Aggregated 3216 company-quarters
+
+  Level 5: Company Overall Aggregation
+    ✓ Aggregated 134 companies overall
+
+✓ Multi-level aggregation complete
+  5 levels analyzed: attribution-type, section, attr vs non-attr, quarter, company
+✓ Saved multilevel embedding stats early: output\embeddings\multilevel_embedding_stats_20251023_160756.csv
+  → Freeing ~2-3 GB of memory
+→ Memory cleaned after multilevel aggregation (saved stats to disk)
+
+3. Label Distribution (External vs Internal)
+  External: 69,618 (25.8%)
+  Internal: 200,065 (74.2%)
+
+Bias Period Labels:
+  High-bias: 8,719 (3.2%)
+  Low-bias: 14,388 (5.3%)
+
+================================================================================
+CLUSTERING VALIDATION - RAW EMBEDDINGS
+================================================================================
+
+================================================================================
+3. STRATEGIC CLUSTERING ANALYSIS
+================================================================================
+
+Framework: Multi-Label Validation → CS2 (Attribution) → HDBSCAN (Company)
+Goal: 1) Validate embeddings capture attribution, 2) Test bias patterns
+
+================================================================================
+STEP 1: Multi-Label Clustering Validation
+================================================================================
+
+Goal: Understand what linguistic features embeddings naturally capture
+Question: Do embeddings cluster by TOPIC? SENTIMENT? or ATTRIBUTION?
+Success: Attribution-type ARI > Topic ARI (embeddings capture attribution!)
+
+Running Global K-Means (k=10) on 269,683 samples...
+  Silhouette Score: 0.015
+
+--------------------------------------------------------------------------------
+Embeddings Cluster Primarily By (ARI ranking):
+--------------------------------------------------------------------------------
+  1. Topic               : ARI=0.065, NMI=0.156 ⚠️  Warning - may be topic-driven
+  2. Attribution Type    : ARI=0.061, NMI=0.099 ⭐ Good - captures attribution!
+  3. Tone                : ARI=0.058, NMI=0.083
+  4. Sentiment           : ARI=0.048, NMI=0.081
+  5. Section             : ARI=0.046, NMI=0.069
+  6. Attribution Outcome : ARI=0.046, NMI=0.084
+  7. Attribution Locus   : ARI=0.033, NMI=0.067
+  8. Target              : ARI=-0.000, NMI=0.003
+
+--------------------------------------------------------------------------------
+Validation Summary:
+--------------------------------------------------------------------------------
+⚠️  CAUTION: Embeddings primarily capture Topic (ARI=0.065)
+  → May need to control for topic effects in bias analysis
+
+================================================================================
+STEP 2: CS2 Attribution Type Level Clustering
+================================================================================
+Now that we validated embeddings capture attribution structure,
+test if targets differ from peers in coherence within attribution types
+
+--------------------------------------------------------------------------------
+CS2: Attribution Type Level Clustering
+--------------------------------------------------------------------------------
+Clustering targets vs. peers within each attribution type
+Hypothesis: Targets show less coherent clusters in self-serving types
+
+
+Positive-Internal (self-serving):
+  Targets: 23,964 samples → coherence=0.802, separation=0.326
+  Peers: 102,969 samples → coherence=0.806, separation=0.304
+  Cohen's d (coherence): -0.004
+
+Negative-External (self-serving):
+  Targets: 4,624 samples → coherence=0.806, separation=0.349
+  Peers: 22,204 samples → coherence=0.807, separation=0.315
+  Cohen's d (coherence): -0.002
+
+Positive-External (non-self-serving):
+  Targets: 4,193 samples → coherence=0.816, separation=0.324
+  Peers: 23,697 samples → coherence=0.816, separation=0.343
+  Cohen's d (coherence): +0.000
+
+Negative-Internal (non-self-serving):
+  Targets: 4,474 samples → coherence=0.793, separation=0.349
+  Peers: 15,504 samples → coherence=0.794, separation=0.335
+  Cohen's d (coherence): -0.001
+
+--------------------------------------------------------------------------------
+CS2 Summary: Attribution Type Clustering
+--------------------------------------------------------------------------------
+
+Coherence Comparison (higher = less tight clusters):
+  Self-serving      : Cohen's d = -0.003
+  Non-self-serving  : Cohen's d = -0.000
+
+================================================================================
+STEP 3: Strategic HDBSCAN Clustering Analysis
+================================================================================
+Company-level and attribution-type coherence analysis
+
+Rationale: Clustering all 269,683 samples is computationally
+prohibitive (O(n²)) and not interpretable. Instead, we cluster strategically:
+  1. Within-company patterns (target vs. peer comparison)
+  2. Attribution-type specific (Pos-Internal vs. Neg-External)
+  3. Temporal patterns (high-bias vs. low-bias quarters)
+
+Approach 1: Company-Level Clustering
+--------------------------------------------------------------------------------
+Clustering attributions within each company to identify narrative patterns
+
+--------------------------------------------------------------------------------
+Approach 2: Attribution-Type Stratified Clustering
+--------------------------------------------------------------------------------
+Comparing targets vs. peers within each attribution type
+
+  Positive-Internal:
+    Targets: 5,000 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-External:
+    Targets: 4,624 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Positive-External:
+    Targets: 4,193 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-Internal:
+    Targets: 4,474 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+================================================================================
+✓ Strategic HDBSCAN analysis complete
+
+================================================================================
+✓ Strategic clustering analysis complete
+
+================================================================================
+CLUSTERING VALIDATION - TOPIC-ADJUSTED EMBEDDINGS
+================================================================================
+
+================================================================================
+3. STRATEGIC CLUSTERING ANALYSIS
+================================================================================
+
+Framework: Multi-Label Validation → CS2 (Attribution) → HDBSCAN (Company)
+Goal: 1) Validate embeddings capture attribution, 2) Test bias patterns
+
+================================================================================
+STEP 1: Multi-Label Clustering Validation
+================================================================================
+
+Goal: Understand what linguistic features embeddings naturally capture
+Question: Do embeddings cluster by TOPIC? SENTIMENT? or ATTRIBUTION?
+Success: Attribution-type ARI > Topic ARI (embeddings capture attribution!)
+
+Running Global K-Means (k=10) on 269,683 samples...
+  Silhouette Score: 0.013
+
+--------------------------------------------------------------------------------
+Embeddings Cluster Primarily By (ARI ranking):
+--------------------------------------------------------------------------------
+  1. Section             : ARI=0.074, NMI=0.075
+  2. Tone                : ARI=0.019, NMI=0.023
+  3. Sentiment           : ARI=0.019, NMI=0.030
+  4. Attribution Outcome : ARI=0.009, NMI=0.029
+  5. Attribution Type    : ARI=0.009, NMI=0.035
+  6. Topic               : ARI=0.004, NMI=0.068 ✓ Good - not topic-driven
+  7. Attribution Locus   : ARI=0.004, NMI=0.025
+  8. Target              : ARI=-0.000, NMI=0.003
+
+--------------------------------------------------------------------------------
+Validation Summary:
+--------------------------------------------------------------------------------
+→ INFO: Embeddings primarily capture Section (ARI=0.074)
+
+================================================================================
+STEP 2: CS2 Attribution Type Level Clustering
+================================================================================
+Now that we validated embeddings capture attribution structure,
+test if targets differ from peers in coherence within attribution types
+
+--------------------------------------------------------------------------------
+CS2: Attribution Type Level Clustering
+--------------------------------------------------------------------------------
+Clustering targets vs. peers within each attribution type
+Hypothesis: Targets show less coherent clusters in self-serving types
+
+
+Positive-Internal (self-serving):
+  Targets: 23,964 samples → coherence=0.788, separation=0.298
+  Peers: 102,969 samples → coherence=0.788, separation=0.263
+  Cohen's d (coherence): +0.001
+
+Negative-External (self-serving):
+  Targets: 4,624 samples → coherence=0.790, separation=0.305
+  Peers: 22,204 samples → coherence=0.793, separation=0.263
+  Cohen's d (coherence): -0.003
+
+Positive-External (non-self-serving):
+  Targets: 4,193 samples → coherence=0.801, separation=0.290
+  Peers: 23,697 samples → coherence=0.804, separation=0.307
+  Cohen's d (coherence): -0.004
+
+Negative-Internal (non-self-serving):
+  Targets: 4,474 samples → coherence=0.780, separation=0.283
+  Peers: 15,504 samples → coherence=0.783, separation=0.277
+  Cohen's d (coherence): -0.004
+
+--------------------------------------------------------------------------------
+CS2 Summary: Attribution Type Clustering
+--------------------------------------------------------------------------------
+
+Coherence Comparison (higher = less tight clusters):
+  Self-serving      : Cohen's d = -0.001
+  Non-self-serving  : Cohen's d = -0.004
+
+================================================================================
+STEP 3: Strategic HDBSCAN Clustering Analysis
+================================================================================
+Company-level and attribution-type coherence analysis
+
+Rationale: Clustering all 269,683 samples is computationally
+prohibitive (O(n²)) and not interpretable. Instead, we cluster strategically:
+  1. Within-company patterns (target vs. peer comparison)
+  2. Attribution-type specific (Pos-Internal vs. Neg-External)
+  3. Temporal patterns (high-bias vs. low-bias quarters)
+
+Approach 1: Company-Level Clustering
+--------------------------------------------------------------------------------
+Clustering attributions within each company to identify narrative patterns
+
+--------------------------------------------------------------------------------
+Approach 2: Attribution-Type Stratified Clustering
+--------------------------------------------------------------------------------
+Comparing targets vs. peers within each attribution type
+
+  Positive-Internal:
+    Targets: 5,000 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-External:
+    Targets: 4,624 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Positive-External:
+    Targets: 4,193 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-Internal:
+    Targets: 4,474 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+================================================================================
+✓ Strategic HDBSCAN analysis complete
+
+================================================================================
+✓ Strategic clustering analysis complete
+
+================================================================================
+TOPIC ADJUSTMENT IMPACT ANALYSIS
+================================================================================
+
+ARI Score Comparison (Higher = Better Clustering Alignment):
+--------------------------------------------------------------------------------
+Label                               Raw ARI    Adjusted ARI     Change          Impact
+--------------------------------------------------------------------------------
+Attribution Locus                     0.033           0.004     -0.028         ✗ Worse
+Attribution Outcome                   0.046           0.009     -0.037         ✗ Worse
+Topic                                 0.065           0.004     -0.061       ✓ REMOVED
+Sentiment                             0.048           0.019     -0.029          -0.029
+
+--------------------------------------------------------------------------------
+VALIDATION RESULT:
+--------------------------------------------------------------------------------
+→ PARTIAL: Topic variance reduced but attribution signal not improved
+  → Attribution may be inherently weak signal
+
+→ Memory cleaned after clustering operations
+
+3b. Aggregating Company-Level Embeddings
+================================================================================
+✓ Aggregated embeddings for 134 companies
+  Targets: 21
+  Peers: 113
+
+3c. Measuring Target vs Peer Separation
+================================================================================
+  Mean target-to-target distance: 0.3611
+  Mean target-to-peer distance: 0.3634
+  Mean peer-to-peer distance: 0.3714
+  Separation ratio: 0.98x
+  ✗ No clear separation between targets and peers
+→ Memory cleaned after company aggregation
+
+4b. Supervised Classification: Bias Prediction
+================================================================================
+Testing hypothesis: Do embeddings capture patterns GPT classifications miss?
+
+Labeled Data:
+  High-bias: 8,719 segments (37.7%)
+  Low-bias: 14,388 segments (62.3%)
+
+1. GPT Baseline Model (5 features: pos_internal, neg_external, pos_external, neg_internal, asymmetry)
+   GPT Baseline AUC: 0.488
+
+2. Embedding Model (3072 features)
+   Embedding AUC: 0.619
+
+3. Combined Model (GPT + Embedding: 3077 features)
+   Combined AUC: 0.544
+
+================================================================================
+HYPOTHESIS TEST RESULTS:
+================================================================================
+
+GPT Baseline:           AUC = 0.488
+Embedding Only:         AUC = 0.619  (Δ = +0.131)
+Combined (GPT + Embed): AUC = 0.544  (Δ = +0.056)
+
+✓ HYPOTHESIS CONFIRMED: Embeddings add significant predictive power
+  Embeddings capture linguistic patterns beyond GPT classifications
+
+4. Supervised Classification on Embeddings
+==================================================
+Train set: 215746 samples
+Test set: 53937 samples
+
+Training Logistic Regression...
+  ROC-AUC: 0.942
+
+Classification Report (Logistic Regression):
+              precision    recall  f1-score   support
+
+           0       0.91      0.94      0.92     40013
+           1       0.82      0.72      0.77     13924
+
+    accuracy                           0.89     53937
+   macro avg       0.86      0.83      0.85     53937
+weighted avg       0.88      0.89      0.88     53937
+
+
+→ Memory cleaned before comprehensive classification
+
+================================================================================
+COMPREHENSIVE ATTRIBUTION CLASSIFICATION
+================================================================================
+Testing: What aspects of attribution can embeddings detect?
+Tasks: (1) Present, (2) Outcome, (3) Locus, (4) Full 4-way Type
+
+--------------------------------------------------------------------------------
+Task 1: Attribution Present vs Not Present
+--------------------------------------------------------------------------------
+Question: Can embeddings distinguish attribution statements from non-attribution?
+Hypothesis: Should be EASY - clear semantic boundary
+
+Label Distribution:
+  Attribution Present:     269,683 (100.0%)
+  Attribution Not Present: 0 (0.0%)
+  ✗ Insufficient samples (need >100 of each class)
+
+--------------------------------------------------------------------------------
+Task 2: Positive vs Negative Outcome
+--------------------------------------------------------------------------------
+Question: Can embeddings detect outcome valence (good vs bad events)?
+Hypothesis: MODERATE difficulty - sentiment-like signal
+
+Label Distribution (filtered to clear attributions):
+  Positive Outcome: 166,069 (76.6%)
+  Negative Outcome: 50,777 (23.4%)
+
+Training Logistic Regression...
+  ROC-AUC: 0.991
+
+  Class: Positive Outcome
+    Precision: 0.986
+    Recall:    0.954
+    F1-Score:  0.970
+  → Memory cleaned after Task 2
+
+--------------------------------------------------------------------------------
+Task 3: Internal vs External Locus ⭐ BASELINE
+--------------------------------------------------------------------------------
+Question: Can embeddings detect attribution locus (who/what caused it)?
+Hypothesis: MODERATE - KNOWN to work well (0.942 AUC)
+
+Label Distribution (filtered to clear attributions):
+  External Locus: 69,618 (29.3%)
+  Internal Locus: 168,070 (70.7%)
+
+Training Logistic Regression...
+  ROC-AUC: 0.961 ⭐
+
+  Class: External Locus
+    Precision: 0.775
+    Recall:    0.894
+    F1-Score:  0.830
+
+  Class: Internal Locus
+    Precision: 0.953
+    Recall:    0.893
+  → Memory cleaned after Task 3
+
+--------------------------------------------------------------------------------
+Task 4: 4-Way Attribution Type Classification
+--------------------------------------------------------------------------------
+Question: Can embeddings distinguish all 4 attribution types simultaneously?
+Hypothesis: HARDEST - requires detecting both outcome AND locus
+
+Classes:
+  1. Positive-Internal (self-serving)
+  2. Negative-External (self-serving)
+  3. Positive-External (non-self-serving)
+  4. Negative-Internal (non-self-serving)
+
+Label Distribution:
+  Negative_External   : 25,768 (13.0%) (self-serving)
+  Negative_Internal   : 19,189 (9.7%) (non-self-serving)
+  Positive_External   : 27,779 (14.0%) (non-self-serving)
+  Positive_Internal   : 125,727 (63.4%) (self-serving)
+
+Training Logistic Regression (multi-class)...
+  ROC-AUC (One-vs-Rest): 0.972
+
+  Per-Class Performance:
+
+  Negative_External (self-serving):
+    Precision: 0.845
+    Recall:    0.827
+    F1-Score:  0.836
+
+  Negative_Internal:
+    Precision: 0.655
+    Recall:    0.851
+    F1-Score:  0.741
+
+  Positive_External:
+    Precision: 0.608
+    Recall:    0.843
+    F1-Score:  0.706
+
+  Positive_Internal (self-serving):
+    Precision: 0.965
+    Recall:    0.843
+    F1-Score:  0.900
+
+  Overall (Macro-Averaged):
+    Precision: 0.768
+    Recall:    0.841
+    F1-Score:  0.796
+
+================================================================================
+COMPREHENSIVE CLASSIFICATION SUMMARY
+================================================================================
+
+Task Difficulty Progression:
+
+  2. Outcome Valence         AUC: 0.991  (Moderate) ⭐⭐ Excellent
+  3. Locus (Int vs Ext)      AUC: 0.961  (Moderate) ⭐⭐ Excellent
+  4. Full 4-Way Type         AUC: 0.972  (Hard    ) ⭐⭐ Excellent
+
+--------------------------------------------------------------------------------
+Interpretation:
+--------------------------------------------------------------------------------
+✓ Embeddings EXCEL at detecting attribution locus (Internal vs External)
+  → Suggests clear linguistic patterns distinguish 'we/us' from 'market/economy'
+
+✓ Embeddings GOOD at detecting outcome valence (Positive vs Negative)
+  → Captures sentiment-like signals in attribution statements
+
+⭐ Embeddings can distinguish FULL attribution types simultaneously
+  → Strong foundation for bias detection via attribution patterns
+
+✓ Comprehensive attribution classification complete
+
+
+5. Detecting Q&A Topic Shifts
+================================================================================
+Insufficient Q&A data for topic shift analysis
+
+6. Topic-Level Temporal Consistency Analysis
+================================================================================
+Hypothesis: Attribution bias manifests as unusual language for specific topics
+Comparing attributions to same-topic discussion (current & historical)
+
+Analyzing 269,683 attribution snippets
+
+Building historical topic embeddings cache...
+✓ Built cache for 9529 company-topic pairs
+
+Analyzing attribution snippets...
+
+✓ Analyzed 269,683 attribution snippets
+  Skipped 0 (missing topic)
+
+Comparison Coverage:
+  With same-quarter comparisons: 0 (0.0%)
+  With historical comparisons: 246,854 (91.5%)
+
+Outlier Detection:
+  Total outliers: 41,158 (15.3%)
+  Within-quarter outliers: 0
+  Historical outliers: 41,158
+
+Target vs Peer Comparison:
+  Target outlier rate: 14.6%
+  Peer outlier rate: 15.4%
+  → No significant difference in topic consistency
+
+Most Inconsistent Topics (Top 5):
+  "Product/Service Updates, Strategic Initiatives"   | Outlier Score: +24286445.20 | Rate: 34.0%
+  Inventory                                          | Outlier Score: +5168448.07 | Rate: 42.7%
+  Credit Quality Metrics                             | Outlier Score: +5046793.47 | Rate: 23.1%
+  Credit Performance                                 | Outlier Score: +3297665.82 | Rate: 41.7%
+  Marketing                                          | Outlier Score: +3127365.33 | Rate: 53.3%
+
+6. Comparing High-Bias vs Low-Bias Period Embeddings
+================================================================================
+  High-bias segments: 8,719
+  Low-bias segments: 14,388
+
+Bias Period Comparison:
+  Euclidean distance: 0.0487
+  Cosine similarity: 0.996
+  High-bias variance: 0.0148
+  Low-bias variance: 0.0147
+  ✗ No clear embedding difference between bias periods
+
+7. Extracting Bias Vector
+================================================================================
+Computing single direction in embedding space that captures bias patterns
+
+  High-bias samples: 8,719
+  Low-bias samples: 14,388
+
+✓ Bias vector extracted
+  Separation magnitude: 0.0487
+  (Larger = stronger distinction between high/low bias)
+
+  Bias Score Distribution:
+    High-bias mean: -0.048 (std: 0.109)
+    Low-bias mean:  -0.096 (std: 0.110)
+    Score separation: 0.049
+    Cohen's d effect size: 0.446
+    → SMALL effect
+
+  Usage: bias_score = dot(new_embedding, bias_vector_normalized)
+         Positive score → High-bias pattern
+         Negative score → Low-bias pattern
+
+9. Principal Component Analysis (PCA)
+================================================================================
+Reducing 3072-D embeddings to 50 principal components
+
+  Fitting PCA...
+✓ PCA complete
+
+  Variance Explained:
+    Top 10 components: 20.1%
+    Top 20 components: 29.2%
+    All 50 components: 43.4%
+
+  Suggested elbow point: 1 components
+    (Captures 4.0% of variance)
+
+  Target vs Peer Separation in PCA Space:
+    Separation in full space: 0.0438
+    Separation in PCA space: 0.0363
+    Retained separation: 83.0%
+
+  Correlating Components with Bias:
+
+    Components Most Correlated with Bias (Top 5):
+      PC 5: r=-0.060 ***  (explains 2.0% variance)
+      PC 6: r=-0.037 ***  (explains 1.6% variance)
+      PC 2: r=+0.030 ***  (explains 3.0% variance)
+      PC 7: r=+0.024 ***  (explains 1.5% variance)
+      PC 3: r=-0.023 ***  (explains 2.2% variance)
+
+  Usage:
+    - Use top 1 components for classification
+    - Use PC1 & PC2 for 2D visualization
+    - Examine component loadings to understand linguistic dimensions
+
+8. Engineering Interpretable Features from Embeddings
+================================================================================
+Extracting scalar features for interpretability and supervised learning
+
+  Computing features for 269,683 embeddings...
+  Computing KNN distances...
+  Computing Local Outlier Factors...
+  Extracting features...
+
+✓ Extracted 11 features per embedding
+
+  Feature Categories:
+    Baseline distances: 2 features
+    Temporal features: 2 features
+    Variance features: 3 features
+    Outlier features: 3 features
+    Bias alignment: 1 feature
+
+  Feature Statistics (targets vs peers):
+    distance_from_company_mean:
+      Targets: 0.803  |  Peers: 0.800
+    knn_distance_k5:
+      Targets: 0.819  |  Peers: 0.811
+    bias_score:
+      Targets: -0.095  |  Peers: -0.098
+
+================================================================================
+PER-FIRM STRATIFIED ANALYSIS
+================================================================================
+Goal: Identify which specific target firms show unusual linguistic patterns
+
+
+Analyzing: 0HMI.L
+  → Found 23 peer folders for BBBY
+  Coherence diff: -0.007 (target: 0.025, peers: 0.032)
+  Outlier ratio: nanx
+
+Analyzing: 0II3.L
+  → Found 19 peer folders for EFX
+  Coherence diff: -0.005 (target: 0.028, peers: 0.033)
+  Outlier ratio: nanx
+
+Analyzing: 0IJN.L
+  → Found 39 peer folders for EXC
+  Coherence diff: -0.007 (target: 0.022, peers: 0.029)
+  Outlier ratio: nanx
+
+Analyzing: 0JRL.L
+  → Found 18 peer folders for KSS
+  Coherence diff: +0.001 (target: 0.035, peers: 0.033)
+  Outlier ratio: nanx
+
+Analyzing: 0LIU.L
+  → Found 23 peer folders for UAL
+  Coherence diff: -0.001 (target: 0.023, peers: 0.023)
+  Outlier ratio: nanx
+
+Analyzing: 0R0P.L
+  ⚠️  No peer folders defined for 0R0P.L
+
+Analyzing: GRPN
+  ⚠️  No peer folders defined for GRPN
+
+Analyzing: HOOD
+  → Found 17 peer folders for HOOD
+  Coherence diff: +0.005 (target: 0.035, peers: 0.030)
+  Outlier ratio: nanx
+
+Analyzing: INTC
+  → Found 24 peer folders for INTC
+  Coherence diff: -0.007 (target: 0.024, peers: 0.030)
+  Outlier ratio: nanx
+
+Analyzing: KBNT
+  → Found 23 peer folders for KBNT
+  Coherence diff: +0.001 (target: 0.033, peers: 0.032)
+  Outlier ratio: nanx
+
+Analyzing: NKLA
+  → Found 10 peer folders for NKLA
+  Coherence diff: -0.002 (target: 0.028, peers: 0.030)
+  Outlier ratio: nanx
+
+Analyzing: NWT.DE
+  → Found 32 peer folders for WFC
+  Coherence diff: +0.003 (target: 0.026, peers: 0.023)
+  Outlier ratio: nanx
+
+Analyzing: OTRK
+  → Found 17 peer folders for OTRK
+  Coherence diff: +0.014 (target: 0.046, peers: 0.031)
+  Outlier ratio: nanx
+
+Analyzing: PTON
+  → Found 6 peer folders for PTON
+  Coherence diff: -0.016 (target: 0.017, peers: 0.032)
+  Outlier ratio: nanx
+
+Analyzing: RNO.PA
+  → Found 17 peer folders for RNO.PA
+  Coherence diff: -0.009 (target: 0.024, peers: 0.033)
+  Outlier ratio: nanx
+
+Analyzing: TL0.DE
+  → Found 22 peer folders for TSLA
+  Coherence diff: -0.007 (target: 0.027, peers: 0.034)
+  Outlier ratio: nanx
+
+Analyzing: TWTR
+  ⚠️  No peer folders defined for TWTR
+
+Analyzing: VOW3.DE
+  → Found 22 peer folders for VOW3.DE
+  Coherence diff: +0.001 (target: 0.034, peers: 0.033)
+  Outlier ratio: nanx
+
+Analyzing: SNAP
+  → Found 15 peer folders for SNAP
+  Coherence diff: +0.017 (target: 0.048, peers: 0.030)
+  Outlier ratio: nanx
+
+Analyzing: BHC.TO
+  → Found 21 peer folders for BHC
+  Coherence diff: -0.017 (target: 0.017, peers: 0.034)
+  Outlier ratio: nanx
+
+Analyzing: BOE.L
+  → Found 14 peer folders for BA
+  Coherence diff: +0.004 (target: 0.033, peers: 0.029)
+  Outlier ratio: nanx
+
+--------------------------------------------------------------------------------
+SUMMARY: Per-Firm Analysis
+--------------------------------------------------------------------------------
+  Analyzed: 18 target firms
+  Flagged as unusual: 0 (0.0%)
+
+================================================================================
+DIMENSIONALITY REDUCTION: PCA vs UMAP
+================================================================================
+
+5. Dimensionality Reduction (PCA)
+==================================================
+Running PCA (n_components=2)...
+✓ PCA complete: shape = (269683, 2)
+  Explained variance: [0.03991952 0.02995082]
+
+5. Dimensionality Reduction (UMAP)
+==================================================
+Running UMAP (n_components=2)...
+✓ UMAP complete: shape = (269683, 2)
+
+Reducing topic-adjusted embeddings...
+
+5. Dimensionality Reduction (UMAP)
+==================================================
+Running UMAP (n_components=2)...
+✓ UMAP complete: shape = (269683, 2)
+  ✓ Topic-adjusted UMAP coordinates computed
+  → Use for visualization of attribution style without topic confound
+
+10. Saving Results
+================================================================================
+✓ Saved embeddings: output\embeddings\embedding_vectors_20251024_034824.npy
+✓ Saved topic-adjusted embeddings: output\embeddings\embedding_vectors_topic_adjusted_20251024_034824.npy
+✓ Saved metadata: output\embeddings\embedding_metadata_20251024_034824.csv
+✓ Saved UMAP coordinates: output\embeddings\umap_coordinates_20251024_034824.csv
+✓ Saved PCA 2D coordinates: output\embeddings\pca_coordinates_2d_20251024_034824.csv
+✓ Saved topic-adjusted UMAP coordinates: output\embeddings\umap_coordinates_topic_adjusted_20251024_034824.csv
+✓ Saved topic temporal consistency: output\embeddings\topic_temporal_consistency_20251024_034824.csv
+✓ Saved topic consistency outliers: output\embeddings\topic_consistency_outliers_20251024_034824.csv (41158 outliers)
+✓ Saved semantic subspace features: output\embeddings\subspace_features_20251024_034824.csv (7 features)
+✓ Saved bias vector: output\embeddings\bias_vector_20251024_034824.npy
+✓ Saved bias scores: output\embeddings\bias_scores_20251024_034824.csv
+✓ Saved PCA embeddings: output\embeddings\pca_embeddings_20251024_034824.npy
+✓ Saved PCA coordinates: output\embeddings\pca_coordinates_20251024_034824.csv
+✓ Saved engineered features: output\embeddings\embedding_features_20251024_034824.csv
+✓ Saved company-level stats: output\embeddings\company_level_stats_20251024_034824.csv
+✓ Saved per-firm analysis: output\embeddings\per_firm_analysis_20251024_034824.csv
+✓ Saved metrics: output\embeddings\embedding_analysis_metrics_20251024_034824.json
+
+================================================================================
+EMBEDDING ANALYSIS COMPLETE
+================================================================================
+
+All results saved to: output\embeddings
+
+================================================================================
+KEY FINDINGS SUMMARY
+================================================================================
+
+🎯 EMBEDDING VALIDATION: What Do Embeddings Capture?
+  Top 3 Features Embeddings Cluster By:
+    1. Topic               : ARI=0.065, NMI=0.156
+    2. Attribution Type    : ARI=0.061, NMI=0.099
+    3. Tone                : ARI=0.058, NMI=0.083
+  ⚠️  CAUTION: Embeddings primarily capture Topic (confound)
+  → Results may reflect topic differences, not bias
+
+🎯 HYPOTHESIS TEST: Do embeddings capture patterns GPT misses?
+  GPT Baseline AUC:       0.488
+  Embedding AUC:          0.619
+  Combined (GPT+Embed):   0.544
+  Improvement:            +0.056
+  ✓ CONFIRMED: Embeddings add significant predictive power
+
+🎯 TARGET vs PEER SEPARATION:
+  Separation ratio: 0.98x
+  → No clear separation in embedding space
+
+🎯 HIGH-BIAS vs LOW-BIAS PERIODS:
+  Euclidean distance: 0.0487
+  Cosine similarity:  0.996
+  → Modest embedding differences
+
+🎯 CS2: ATTRIBUTION TYPE CLUSTERING (Strategic):
+  Self-serving types (Pos-Int, Neg-Ext):
+    Cohen's d (coherence): -0.003
+  Non-self-serving types (Pos-Ext, Neg-Int):
+    Cohen's d (coherence): -0.000
+
+  KEY FINDING - Negative-External:
+    Target coherence: 0.806
+    Peer coherence:   0.807
+    Cohen's d:        -0.002
+
+🎯 TOPIC TEMPORAL CONSISTENCY:
+  Attributions analyzed: 269,683
+  Overall outlier rate: 15.3%
+  Target outlier rate: 14.6%
+  Peer outlier rate: 15.4%
+  → No significant difference in topic consistency
+
+🎯 BIAS VECTOR:
+  Cohen's d effect size: 0.446
+  → SMALL effect
+
+🎯 PCA DIMENSIONALITY REDUCTION:
+  Components for 95% variance: 50
+  Suggested elbow point: 1 components
+  Target-peer separation retained: 83.0%
+
+================================================================================
+Next steps:
+  1. Review embedding_analysis_metrics.json for complete results
+  2. Use umap_coordinates.csv or pca_coordinates.csv for visualization
+  3. Check qna_topic_shifts.csv for topic switching patterns
+  4. Review topic_temporal_consistency.csv for attribution outliers
+  5. Examine topic_consistency_outliers.csv for flagged attributions
+
+Log file saved: output\embeddings\analysis_log_20251023_160407.txt
+  6. Use bias_scores.csv for single-score bias measurement
+  7. Use embedding_features.csv for supervised learning with interpretable features
+  8. Review multilevel_embedding_stats.csv for granular analysis

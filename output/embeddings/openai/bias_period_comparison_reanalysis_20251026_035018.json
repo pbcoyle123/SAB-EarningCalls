@@ -1,0 +1,8 @@
+{
+  "euclidean_distance": 0.05910062417387962,
+  "cosine_similarity": 0.9939964413642883,
+  "expert_period_std": 0.01475216168910265,
+  "normal_period_std": 0.014757617376744747,
+  "n_expert_period": 13411,
+  "n_normal_period": 256272
+}

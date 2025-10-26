@@ -1,12 +1,61 @@
-# Python
+# Python cache only (keep these ignored)
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
+
+# IDEs (keep these ignored)
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# API Keys and Secrets (IMPORTANT: keep these ignored for security!)
+config.json
+*.key
+*.pem
+.env
+
+# Everything else below is now ALLOWED to be uploaded:
+# Output and Data Files - NOW INCLUDED
+# logs/
+# *.log
+
+# Large data files - NOW INCLUDED
+#*.mp3
+#*.wav
+#*.mp4
+#raw_files/
+#02/
+#03/
+#04/
+#05/
+
+# Model files - NOW INCLUDED
+#*.pkl
+#*.model
+#*.h5
+#*.pt
+#*.pth
+
+# Jupyter Notebook - NOW INCLUDED
+# .ipynb_checkpoints/
+# *.ipynb
+
+# Testing - NOW INCLUDED
+# .pytest_cache/
+# .coverage
+# htmlcov/
+
+# Virtual environments (optional - uncomment if you don't want to upload)
+# env/
+# venv/
+# ENV/
+
+# Build artifacts (optional - keep these ignored)
 build/
 develop-eggs/
 dist/
@@ -23,51 +72,5 @@ wheels/
 .installed.cfg
 *.egg
 
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Output and Data Files
-output/
-logs/
-*.log
-
-# API Keys and Secrets
-config.json
-*.key
-*.pem
-.env
-
-# Large data files
-*.mp3
-*.wav
-*.mp4
-raw_files/
-02/
-03/
-04/
-05/
-
-# Model files
-*.pkl
-*.model
-*.h5
-*.pt
-*.pth
-
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
 # OS
 Thumbs.db
-

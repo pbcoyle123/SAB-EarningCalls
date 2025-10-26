@@ -1,0 +1,1289 @@
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+✓ Model loaded successfully
+
+Initialized EmbeddingAnalyzer
+  Input: classification_results
+  Config: company_config.json
+  Log file: output\embeddings\analysis_log_20251025_000155.txt
+  Benchmark: output\peer_validation
+  Output: output\embeddings
+  Peer groups loaded: 23
+  Embedding source: SentenceTransformers
+
+================================================================================
+EMBEDDING ANALYSIS WITH PEER BENCHMARK INTEGRATION
+================================================================================
+
+1. Loading Attribution Data with Target/Peer Labels
+================================================================================
+✓ Found 31 instance folders with 05/ subdirectory
+
+✓ Loaded 3435 CSV files
+✓ Found 139 unique companies
+✓ Matched 21 target companies
+✓ Matched 117 peer companies
+
+Data Summary:
+  Total rows before filtering: 942,847
+  After filtering (attribution_present=Y, not filtered_out): 269,686
+  Target company rows: 50,244
+  Peer company rows: 224,553
+  After text length filtering: 269,683 segments
+
+📊 Loading Expert-Identified Bias Periods
+================================================================================
+✓ Extracted expert periods for 23 companies
+✓ Total company-quarters flagged: 172
+  - Exact periods: 80
+  - ±1Q window: 46
+  - ±2Q window: 46
+
+  Sample companies with expert periods:
+    • INTC: Blame/Defensiveness/Evasion
+    • SNAP: Blame/Defensiveness/Evasion
+    • BBBY: Overconfidence
+    • EFX: Blame/Defensiveness/Evasion
+    • EXC: Blame/Defensiveness/Evasion
+    ... and 18 more
+
+📋 Loading Expert-Identified Bias Periods
+================================================================================
+  ✓ Extracted expert bias periods for 23 target companies
+    • INTC: Blame/Defensiveness/Evasion starting (2021, 3)
+    • SNAP: Blame/Defensiveness/Evasion starting (2022, 1) to (2022, 4)
+    • BBBY: Overconfidence starting (2020, 2) to (2022, 3)
+    • EFX: Blame/Defensiveness/Evasion starting (2017, 4) to (2018, 3)
+    • EXC: Blame/Defensiveness/Evasion starting (2023, 1)
+    • KSS: Blame/Defensiveness/Evasion starting (2024, 3)
+    • UAL: Blame/Defensiveness/Evasion starting (2017, 2) to (2017, 3)
+    • BHC: Overconfidence starting (2015, 4) to (2016, 3)
+    • BA: Blame/Defensiveness/Evasion starting (2019, 2) to (2020, 4)
+    • FXLV: Overconfidence starting (2022, 1) to (2022, 3)
+    ... and 13 more
+
+📊 Creating Expert-Labeled Dataset
+================================================================================
+  ✓ Labeled 1,831 segments as expert high-bias (exact quarter)
+  ✓ Labeled 8,929 segments in expert bias windows (±2 quarters)
+  → 0.7% exact bias labels
+  → 3.3% in bias windows
+
+2. Extracting Embeddings
+==================================================
+Extracting embeddings for 269683 texts...
+  Model: sentence-transformers/all-MiniLM-L6-v2
+  Batch size: 32
+
+✓ Embeddings extracted: shape = (269683, 384)
+  Embedding dimension: 384
+
+================================================================================
+TOPIC ADJUSTMENT - Removing Confound
+================================================================================
+
+Computing topic-adjusted embeddings...
+Goal: Remove topic variance to isolate attribution STYLE
+  ✓ Adjusted 191 topics covering 264,035 samples
+  → Embeddings now capture STYLE of discussion, not topic content
+
+2c. Extracting Semantic Subspaces
+================================================================================
+  Embedding dimensions: 384
+  Sentiment subspace: dims 50-120
+  Formality subspace: dims 120-180
+  Certainty subspace: dims 180-240
+  Specificity subspace: dims 240-300
+  Causality subspace: dims 300-360
+
+✓ Extracted 7 subspace features
+
+Subspace feature statistics:
+                       count      mean       std       min       25%       50%       75%       max
+sentiment_strength  269683.0  0.443045  0.034474  0.284128  0.419764  0.443856  0.467093  0.579392
+causality_strength  269683.0  0.385157  0.031923  0.240340  0.363469  0.384855  0.406613  0.537488
+certainty_strength  269683.0  0.386588  0.032074  0.247167  0.364802  0.386349  0.408192  0.535991
+
+2b. Aggregating Multi-Level Embeddings
+================================================================================
+
+  Level 1: Attribution-Type Aggregation
+    ✓ Aggregated 15687 attribution-type groups
+
+  Level 2: Section Aggregation
+    ✓ Aggregated 6321 section groups
+
+  Level 3: Attribution vs Non-Attribution
+    ✓ Aggregated 3216 attribution/non-attribution groups
+
+  Level 4: Company-Quarter Aggregation
+    ✓ Aggregated 3216 company-quarters
+
+  Level 5: Company Overall Aggregation
+    ✓ Aggregated 134 companies overall
+
+✓ Multi-level aggregation complete
+  5 levels analyzed: attribution-type, section, attr vs non-attr, quarter, company
+✓ Saved multilevel embedding stats early: output\embeddings\multilevel_embedding_stats_20251025_005539.csv
+  → Freeing ~2-3 GB of memory
+→ Memory cleaned after multilevel aggregation (saved stats to disk)
+
+3. Label Distribution (External vs Internal)
+  External: 69,618 (25.8%)
+  Internal: 200,065 (74.2%)
+
+Expert Period Labels:
+  Segments in expert periods: 13,411 (5.0%)
+  Segments in normal periods: 256,272 (95.0%)
+
+================================================================================
+CLUSTERING VALIDATION - RAW EMBEDDINGS
+================================================================================
+
+================================================================================
+3. STRATEGIC CLUSTERING ANALYSIS
+================================================================================
+
+Framework: Multi-Label Validation → CS2 (Attribution) → HDBSCAN (Company)
+Goal: 1) Validate embeddings capture attribution, 2) Test bias patterns
+
+================================================================================
+STEP 1: Multi-Label Clustering Validation
+================================================================================
+
+Goal: Understand what linguistic features embeddings naturally capture
+Question: Do embeddings cluster by TOPIC? SENTIMENT? or ATTRIBUTION?
+Success: Attribution-type ARI > Topic ARI (embeddings capture attribution!)
+
+Running Global K-Means (k=10) on 269,683 samples...
+  Silhouette Score: 0.010
+
+--------------------------------------------------------------------------------
+Embeddings Cluster Primarily By (ARI ranking):
+--------------------------------------------------------------------------------
+  1. Topic               : ARI=0.046, NMI=0.122 ⚠️  Warning - may be topic-driven
+  2. Section             : ARI=0.037, NMI=0.061
+  3. Tone                : ARI=0.028, NMI=0.048
+  4. Attribution Type    : ARI=0.019, NMI=0.048
+  5. Sentiment           : ARI=0.014, NMI=0.037
+  6. Attribution Outcome : ARI=0.014, NMI=0.039
+  7. Attribution Locus   : ARI=0.009, NMI=0.030
+  8. Target              : ARI=-0.000, NMI=0.000
+
+--------------------------------------------------------------------------------
+Validation Summary:
+--------------------------------------------------------------------------------
+⚠️  CAUTION: Embeddings primarily capture Topic (ARI=0.046)
+  → May need to control for topic effects in bias analysis
+
+================================================================================
+STEP 2: CS2 Attribution Type Level Clustering
+================================================================================
+Now that we validated embeddings capture attribution structure,
+test if targets differ from peers in coherence within attribution types
+
+--------------------------------------------------------------------------------
+CS2: Attribution Type Level Clustering
+--------------------------------------------------------------------------------
+Clustering targets vs. peers within each attribution type
+Hypothesis: Targets show less coherent clusters in self-serving types
+
+
+Positive-Internal (self-serving):
+  Targets: 23,964 samples → coherence=0.812, separation=0.384
+  Peers: 102,969 samples → coherence=0.815, separation=0.392
+  Cohen's d (coherence): -0.004
+
+Negative-External (self-serving):
+  Targets: 4,624 samples → coherence=0.824, separation=0.383
+  Peers: 22,204 samples → coherence=0.820, separation=0.376
+  Cohen's d (coherence): +0.005
+
+Positive-External (non-self-serving):
+  Targets: 4,193 samples → coherence=0.821, separation=0.381
+  Peers: 23,697 samples → coherence=0.822, separation=0.383
+  Cohen's d (coherence): -0.000
+
+Negative-Internal (non-self-serving):
+  Targets: 4,474 samples → coherence=0.814, separation=0.417
+  Peers: 15,504 samples → coherence=0.809, separation=0.415
+  Cohen's d (coherence): +0.006
+
+--------------------------------------------------------------------------------
+CS2 Summary: Attribution Type Clustering
+--------------------------------------------------------------------------------
+
+Coherence Comparison (higher = less tight clusters):
+  Self-serving      : Cohen's d = +0.001
+  Non-self-serving  : Cohen's d = +0.003
+
+================================================================================
+STEP 3: Strategic HDBSCAN Clustering Analysis
+================================================================================
+Company-level and attribution-type coherence analysis
+
+Rationale: Clustering all 269,683 samples is computationally
+prohibitive (O(n²)) and not interpretable. Instead, we cluster strategically:
+  1. Within-company patterns (target vs. peer comparison)
+  2. Attribution-type specific (Pos-Internal vs. Neg-External)
+  3. Temporal patterns (high-bias vs. low-bias quarters)
+
+Approach 1: Company-Level Clustering
+--------------------------------------------------------------------------------
+Clustering attributions within each company to identify narrative patterns
+
+--------------------------------------------------------------------------------
+Approach 2: Attribution-Type Stratified Clustering
+--------------------------------------------------------------------------------
+Comparing targets vs. peers within each attribution type
+
+  Positive-Internal:
+    Targets: 5,000 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-External:
+    Targets: 4,624 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Positive-External:
+    Targets: 4,193 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-Internal:
+    Targets: 4,474 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+================================================================================
+✓ Strategic HDBSCAN analysis complete
+
+================================================================================
+✓ Strategic clustering analysis complete
+
+================================================================================
+CLUSTERING VALIDATION - TOPIC-ADJUSTED EMBEDDINGS
+================================================================================
+
+================================================================================
+3. STRATEGIC CLUSTERING ANALYSIS
+================================================================================
+
+Framework: Multi-Label Validation → CS2 (Attribution) → HDBSCAN (Company)
+Goal: 1) Validate embeddings capture attribution, 2) Test bias patterns
+
+================================================================================
+STEP 1: Multi-Label Clustering Validation
+================================================================================
+
+Goal: Understand what linguistic features embeddings naturally capture
+Question: Do embeddings cluster by TOPIC? SENTIMENT? or ATTRIBUTION?
+Success: Attribution-type ARI > Topic ARI (embeddings capture attribution!)
+
+Running Global K-Means (k=10) on 269,683 samples...
+  Silhouette Score: 0.006
+
+--------------------------------------------------------------------------------
+Embeddings Cluster Primarily By (ARI ranking):
+--------------------------------------------------------------------------------
+  1. Section             : ARI=0.032, NMI=0.051
+  2. Tone                : ARI=0.018, NMI=0.029
+  3. Attribution Type    : ARI=0.011, NMI=0.032 ⭐ Good - captures attribution!
+  4. Attribution Outcome : ARI=0.010, NMI=0.027
+  5. Sentiment           : ARI=0.009, NMI=0.022
+  6. Topic               : ARI=0.005, NMI=0.033 ✓ Good - not topic-driven
+  7. Attribution Locus   : ARI=0.004, NMI=0.020
+  8. Target              : ARI=-0.000, NMI=0.000
+
+--------------------------------------------------------------------------------
+Validation Summary:
+--------------------------------------------------------------------------------
+→ INFO: Embeddings primarily capture Section (ARI=0.032)
+
+================================================================================
+STEP 2: CS2 Attribution Type Level Clustering
+================================================================================
+Now that we validated embeddings capture attribution structure,
+test if targets differ from peers in coherence within attribution types
+
+--------------------------------------------------------------------------------
+CS2: Attribution Type Level Clustering
+--------------------------------------------------------------------------------
+Clustering targets vs. peers within each attribution type
+Hypothesis: Targets show less coherent clusters in self-serving types
+
+
+Positive-Internal (self-serving):
+  Targets: 23,964 samples → coherence=0.800, separation=0.333
+  Peers: 102,969 samples → coherence=0.800, separation=0.331
+  Cohen's d (coherence): -0.001
+
+Negative-External (self-serving):
+  Targets: 4,624 samples → coherence=0.808, separation=0.336
+  Peers: 22,204 samples → coherence=0.804, separation=0.339
+  Cohen's d (coherence): +0.005
+
+Positive-External (non-self-serving):
+  Targets: 4,193 samples → coherence=0.805, separation=0.344
+  Peers: 23,697 samples → coherence=0.805, separation=0.355
+  Cohen's d (coherence): +0.000
+
+Negative-Internal (non-self-serving):
+  Targets: 4,474 samples → coherence=0.799, separation=0.369
+  Peers: 15,504 samples → coherence=0.795, separation=0.361
+  Cohen's d (coherence): +0.006
+
+--------------------------------------------------------------------------------
+CS2 Summary: Attribution Type Clustering
+--------------------------------------------------------------------------------
+
+Coherence Comparison (higher = less tight clusters):
+  Self-serving      : Cohen's d = +0.002
+  Non-self-serving  : Cohen's d = +0.003
+
+================================================================================
+STEP 3: Strategic HDBSCAN Clustering Analysis
+================================================================================
+Company-level and attribution-type coherence analysis
+
+Rationale: Clustering all 269,683 samples is computationally
+prohibitive (O(n²)) and not interpretable. Instead, we cluster strategically:
+  1. Within-company patterns (target vs. peer comparison)
+  2. Attribution-type specific (Pos-Internal vs. Neg-External)
+  3. Temporal patterns (high-bias vs. low-bias quarters)
+
+Approach 1: Company-Level Clustering
+--------------------------------------------------------------------------------
+Clustering attributions within each company to identify narrative patterns
+
+--------------------------------------------------------------------------------
+Approach 2: Attribution-Type Stratified Clustering
+--------------------------------------------------------------------------------
+Comparing targets vs. peers within each attribution type
+
+  Positive-Internal:
+    Targets: 5,000 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-External:
+    Targets: 4,624 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Positive-External:
+    Targets: 4,193 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+  Negative-Internal:
+    Targets: 4,474 samples → clustering failed
+    Peers: 5,000 samples → clustering failed
+
+================================================================================
+✓ Strategic HDBSCAN analysis complete
+
+================================================================================
+✓ Strategic clustering analysis complete
+
+================================================================================
+TOPIC ADJUSTMENT IMPACT ANALYSIS
+================================================================================
+
+ARI Score Comparison (Higher = Better Clustering Alignment):
+--------------------------------------------------------------------------------
+Label                               Raw ARI    Adjusted ARI     Change          Impact
+--------------------------------------------------------------------------------
+Attribution Locus                     0.009           0.004     -0.005         ✗ Worse
+Attribution Outcome                   0.014           0.010     -0.004         ✗ Worse
+Topic                                 0.046           0.005     -0.042       ✓ REMOVED
+Sentiment                             0.014           0.009     -0.005          -0.005
+
+--------------------------------------------------------------------------------
+VALIDATION RESULT:
+--------------------------------------------------------------------------------
+→ PARTIAL: Topic variance reduced but attribution signal not improved
+  → Attribution may be inherently weak signal
+
+→ Memory cleaned after clustering operations
+
+3b. Aggregating Company-Level Embeddings
+================================================================================
+✓ Aggregated embeddings for 134 companies
+  Targets: 21
+  Peers: 113
+
+3c. Measuring Target vs Peer Separation
+================================================================================
+  Mean target-to-target distance: 0.2862
+  Mean target-to-peer distance: 0.2898
+  Mean peer-to-peer distance: 0.2981
+  Separation ratio: 0.97x
+  ✗ No clear separation between targets and peers
+→ Memory cleaned after company aggregation
+
+4b. Supervised Classification: Expert Period Prediction
+================================================================================
+Testing: Do embeddings detect patterns around expert periods that GPT SAB analysis missed?
+
+Labeled Data:
+  Expert periods: 13,411 segments (5.0%)
+  Normal periods: 256,272 segments (95.0%)
+
+1. GPT Baseline Model (5 features: pos_internal, neg_external, pos_external, neg_internal, asymmetry)
+   GPT Baseline AUC: 0.720
+
+2. Embedding Model (384 features)
+   Embedding AUC: 0.765
+
+3. Combined Model (GPT + Embedding: 389 features)
+   Combined AUC: 0.813
+
+================================================================================
+HYPOTHESIS TEST RESULTS:
+================================================================================
+
+GPT Baseline:           AUC = 0.720
+Embedding Only:         AUC = 0.765  (Δ = +0.046)
+Combined (GPT + Embed): AUC = 0.813  (Δ = +0.093)
+
+✓ HYPOTHESIS CONFIRMED: Embeddings detect linguistic patterns around expert periods
+  Even though SAB proportions show no difference, embeddings capture other signals
+  (e.g., tone, complexity, semantic coherence, defensiveness)
+
+4. Supervised Classification on Embeddings
+==================================================
+Train set: 215746 samples
+Test set: 53937 samples
+
+Training Logistic Regression...
+  ROC-AUC: 0.862
+
+Classification Report (Logistic Regression):
+              precision    recall  f1-score   support
+
+           0       0.85      0.93      0.89     40013
+           1       0.72      0.53      0.61     13924
+
+    accuracy                           0.83     53937
+   macro avg       0.79      0.73      0.75     53937
+weighted avg       0.82      0.83      0.82     53937
+
+
+→ Memory cleaned before comprehensive classification
+
+================================================================================
+COMPREHENSIVE ATTRIBUTION CLASSIFICATION
+================================================================================
+Testing: What aspects of attribution can embeddings detect?
+Tasks: (1) Present, (2) Outcome, (3) Locus, (4) Full 4-way Type
+
+--------------------------------------------------------------------------------
+Task 1: Attribution Present vs Not Present
+--------------------------------------------------------------------------------
+Question: Can embeddings distinguish attribution statements from non-attribution?
+Hypothesis: Should be EASY - clear semantic boundary
+
+Label Distribution:
+  Attribution Present:     269,683 (100.0%)
+  Attribution Not Present: 0 (0.0%)
+  ✗ Insufficient samples (need >100 of each class)
+
+--------------------------------------------------------------------------------
+Task 2: Positive vs Negative Outcome
+--------------------------------------------------------------------------------
+Question: Can embeddings detect outcome valence (good vs bad events)?
+Hypothesis: MODERATE difficulty - sentiment-like signal
+
+Label Distribution (filtered to clear attributions):
+  Positive Outcome: 166,069 (76.6%)
+  Negative Outcome: 50,777 (23.4%)
+
+Training Logistic Regression...
+  ROC-AUC: 0.927
+
+  Class: Positive Outcome
+    Precision: 0.950
+    Recall:    0.852
+    F1-Score:  0.898
+  → Memory cleaned after Task 2
+
+--------------------------------------------------------------------------------
+Task 3: Internal vs External Locus ⭐ BASELINE
+--------------------------------------------------------------------------------
+Question: Can embeddings detect attribution locus (who/what caused it)?
+Hypothesis: MODERATE - KNOWN to work well (0.942 AUC)
+
+Label Distribution (filtered to clear attributions):
+  External Locus: 69,618 (29.3%)
+  Internal Locus: 168,070 (70.7%)
+
+Training Logistic Regression...
+  ROC-AUC: 0.883 ⭐
+
+  Class: External Locus
+    Precision: 0.625
+    Recall:    0.795
+    F1-Score:  0.700
+
+  Class: Internal Locus
+    Precision: 0.904
+    Recall:    0.803
+  → Memory cleaned after Task 3
+
+--------------------------------------------------------------------------------
+Task 4: 4-Way Attribution Type Classification
+--------------------------------------------------------------------------------
+Question: Can embeddings distinguish all 4 attribution types simultaneously?
+Hypothesis: HARDEST - requires detecting both outcome AND locus
+
+Classes:
+  1. Positive-Internal (self-serving)
+  2. Negative-External (self-serving)
+  3. Positive-External (non-self-serving)
+  4. Negative-Internal (non-self-serving)
+
+Label Distribution:
+  Negative_External   : 25,768 (13.0%) (self-serving)
+  Negative_Internal   : 19,189 (9.7%) (non-self-serving)
+  Positive_External   : 27,779 (14.0%) (non-self-serving)
+  Positive_Internal   : 125,727 (63.4%) (self-serving)
+
+Training Logistic Regression (multi-class)...
+  ROC-AUC (One-vs-Rest): 0.889
+
+  Per-Class Performance:
+
+  Negative_External (self-serving):
+    Precision: 0.644
+    Recall:    0.674
+    F1-Score:  0.659
+
+  Negative_Internal:
+    Precision: 0.383
+    Recall:    0.678
+    F1-Score:  0.489
+
+  Positive_External:
+    Precision: 0.412
+    Recall:    0.655
+    F1-Score:  0.506
+
+  Positive_Internal (self-serving):
+    Precision: 0.916
+    Recall:    0.680
+    F1-Score:  0.781
+
+  Overall (Macro-Averaged):
+    Precision: 0.589
+    Recall:    0.672
+    F1-Score:  0.609
+
+================================================================================
+COMPREHENSIVE CLASSIFICATION SUMMARY
+================================================================================
+
+Task Difficulty Progression:
+
+  2. Outcome Valence         AUC: 0.927  (Moderate) ⭐⭐ Excellent
+  3. Locus (Int vs Ext)      AUC: 0.883  (Moderate) ⭐ Strong
+  4. Full 4-Way Type         AUC: 0.889  (Hard    ) ⭐ Strong
+
+--------------------------------------------------------------------------------
+Interpretation:
+--------------------------------------------------------------------------------
+
+✓ Embeddings GOOD at detecting outcome valence (Positive vs Negative)
+  → Captures sentiment-like signals in attribution statements
+
+⭐ Embeddings can distinguish FULL attribution types simultaneously
+  → Strong foundation for bias detection via attribution patterns
+
+✓ Comprehensive attribution classification complete
+
+
+5. Detecting Q&A Topic Shifts
+================================================================================
+Insufficient Q&A data for topic shift analysis
+
+6. Topic-Level Temporal Consistency Analysis
+================================================================================
+Hypothesis: Attribution bias manifests as unusual language for specific topics
+Comparing attributions to same-topic discussion (current & historical)
+
+Analyzing 269,683 attribution snippets
+
+Building historical topic embeddings cache...
+✓ Built cache for 9529 company-topic pairs
+
+Analyzing attribution snippets...
+
+✓ Analyzed 269,683 attribution snippets
+  Skipped 0 (missing topic)
+
+Comparison Coverage:
+  With same-quarter comparisons: 0 (0.0%)
+  With historical comparisons: 246,854 (91.5%)
+
+Outlier Detection:
+  Total outliers: 38,523 (14.3%)
+  Within-quarter outliers: 0
+  Historical outliers: 38,523
+
+Target vs Peer Comparison:
+  Target outlier rate: 13.8%
+  Peer outlier rate: 14.4%
+  → No significant difference in topic consistency
+
+Most Inconsistent Topics (Top 5):
+  Provision for Credit Losses                        | Outlier Score: +7402401.32 | Rate: 83.3%
+  "Revenue, Geographic Performance"                  | Outlier Score: +5354482.38 | Rate: 34.6%
+  Asset Quality                                      | Outlier Score: +4062110.22 | Rate: 83.3%
+  "Operating Margin, Guidance"                       | Outlier Score: +2031305.41 | Rate: 36.7%
+  Working Capital                                    | Outlier Score: +1996231.08 | Rate: 37.7%
+
+6. Comparing Expert Period vs Normal Period Embeddings
+================================================================================
+  Expert period segments: 13,411
+  Normal period segments: 256,272
+
+Period Comparison Results:
+  Euclidean distance: 0.0445
+  Cosine similarity: 0.996
+  Expert period variance: 0.0435
+  Normal period variance: 0.0435
+  ✗ No clear embedding difference between periods
+  → Language patterns similar across expert and normal periods
+
+7. Extracting Linguistic Signature Vector
+================================================================================
+Computing direction in embedding space that captures expert-period patterns
+
+  Expert period samples: 13,411
+  Normal period samples: 256,272
+
+✓ Linguistic signature vector extracted
+  Separation magnitude: 0.0445
+  (Larger = stronger linguistic distinction between expert/normal periods)
+
+  Signature Score Distribution:
+    Expert period mean: +0.036 (std: 0.104)
+    Normal period mean: -0.009 (std: 0.103)
+    Score separation: 0.044
+    Cohen's d effect size: 0.430
+    → SMALL effect
+
+  Usage: signature_score = dot(new_embedding, signature_vector_normalized)
+         Positive score → Expert-period linguistic pattern
+         Negative score → Normal-period linguistic pattern
+
+9. Principal Component Analysis (PCA)
+================================================================================
+Reducing 384-D embeddings to 50 principal components
+
+  Fitting PCA...
+✓ PCA complete
+
+  Variance Explained:
+    Top 10 components: 26.8%
+    Top 20 components: 37.8%
+    All 50 components: 56.7%
+
+  Suggested elbow point: 1 components
+    (Captures 6.1% of variance)
+
+  Target vs Peer Separation in PCA Space:
+    Separation in full space: 0.0326
+    Separation in PCA space: 0.0275
+    Retained separation: 84.3%
+
+  Correlating Components with Expert Periods:
+
+    Components Most Correlated with Expert Periods (Top 5):
+      PC 7: r=-0.031 ***  (explains 1.9% variance)
+      PC 3: r=+0.020 ***  (explains 2.9% variance)
+      PC 5: r=-0.019 ***  (explains 2.1% variance)
+      PC 1: r=+0.010 ***  (explains 6.1% variance)
+      PC 6: r=+0.009 ***  (explains 2.1% variance)
+
+  Usage:
+    - Use top 1 components for classification
+    - Use PC1 & PC2 for 2D visualization
+    - Examine component loadings to understand linguistic dimensions
+
+8. Engineering Interpretable Features from Embeddings
+================================================================================
+Extracting scalar features for interpretability and supervised learning
+
+  Computing features for 269,683 embeddings...
+  Computing KNN distances...
+  Computing Local Outlier Factors...
+  Extracting features...
+
+✓ Extracted 11 features per embedding
+
+  Feature Categories:
+    Baseline distances: 2 features
+    Temporal features: 2 features
+    Variance features: 3 features
+    Outlier features: 3 features
+
+  Feature Statistics (targets vs peers):
+    distance_from_company_mean:
+      Targets: 0.836  |  Peers: 0.834
+    knn_distance_k5:
+      Targets: 0.788  |  Peers: 0.781
+
+================================================================================
+PER-FIRM STRATIFIED ANALYSIS (WITH TEMPORAL SEGMENTATION)
+================================================================================
+Goal: Identify if targets show DIFFERENT patterns during bias periods vs normal periods
+
+
+[1/21] Analyzing: 0HMI.L
+  → Found 23 peer folders for BBBY
+  Target's bias quarters: [(2020, 2), (2020, 3), (2020, 4), (2021, 1), (2021, 2), (2021, 3), (2021, 4), (2022, 1), (2022, 2), (2022, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   639 statements
+    Target OUT bias periods: 1173 statements
+    Peers IN bias periods:   9137 statements
+    Peers OUT bias periods:  18834 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.029, Peers=0.041, Gap=-0.013
+    IN bias period:  Target=0.027, Peers=0.045, Gap=-0.018
+    OUT bias period: Target=0.035, Peers=0.044, Gap=-0.009
+    CHANGE in gap:   -0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.6%, Peers=3.6%, Ratio=1.00x
+    IN bias period:  Target=3.5%, Peers=3.3%, Ratio=1.09x
+    OUT bias period: Target=3.3%, Peers=3.6%, Ratio=0.92x
+    CHANGE in ratio: +0.16x  
+
+[2/21] Analyzing: 0II3.L
+  → Found 19 peer folders for EFX
+  Target's bias quarters: [(2017, 4), (2018, 1), (2018, 2), (2018, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   610 statements
+    Target OUT bias periods: 3481 statements
+    Peers IN bias periods:   2243 statements
+    Peers OUT bias periods:  9708 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.047, Peers=0.045, Gap=+0.002
+    IN bias period:  Target=0.063, Peers=0.051, Gap=+0.012
+    OUT bias period: Target=0.045, Peers=0.048, Gap=-0.003
+    CHANGE in gap:   +0.015  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.11x
+    IN bias period:  Target=2.5%, Peers=3.0%, Ratio=0.85x
+    OUT bias period: Target=3.8%, Peers=3.3%, Ratio=1.14x
+    CHANGE in ratio: -0.29x  
+
+[3/21] Analyzing: 0IJN.L
+  → Found 39 peer folders for EXC
+  Target's bias quarters: [(2023, 1)]
+  Temporal segmentation:
+    Target IN bias periods:    84 statements
+    Target OUT bias periods: 1332 statements
+    Peers IN bias periods:    737 statements
+    Peers OUT bias periods:  19254 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.040, Peers=0.044, Gap=-0.004
+    IN bias period:  Target=0.038, Peers=0.058, Gap=-0.020
+    OUT bias period: Target=0.042, Peers=0.043, Gap=-0.001
+    CHANGE in gap:   -0.019  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.11x
+    IN bias period:  Target=2.7%, Peers=1.2%, Ratio=2.32x
+    OUT bias period: Target=3.6%, Peers=3.3%, Ratio=1.10x
+    CHANGE in ratio: +1.21x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 1.21x during bias periods
+
+[4/21] Analyzing: 0JRL.L
+  → Found 18 peer folders for KSS
+  Target's bias quarters: [(2024, 3)]
+  Temporal segmentation:
+    Target IN bias periods:    78 statements
+    Target OUT bias periods: 1177 statements
+    Peers IN bias periods:    654 statements
+    Peers OUT bias periods:  14842 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.046, Peers=0.043, Gap=+0.003
+    IN bias period:  Target=0.062, Peers=0.056, Gap=+0.006
+    OUT bias period: Target=0.061, Peers=0.043, Gap=+0.018
+    CHANGE in gap:   -0.013  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.4%, Peers=3.7%, Ratio=0.91x
+    IN bias period:  Target=4.4%, Peers=2.3%, Ratio=1.90x
+    OUT bias period: Target=3.9%, Peers=3.8%, Ratio=1.04x
+    CHANGE in ratio: +0.86x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.86x during bias periods
+
+[5/21] Analyzing: 0LIU.L
+  → Found 23 peer folders for UAL
+  Target's bias quarters: [(2017, 2), (2017, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   175 statements
+    Target OUT bias periods: 1329 statements
+    Peers IN bias periods:    687 statements
+    Peers OUT bias periods:  7989 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.031, Peers=0.043, Gap=-0.012
+    IN bias period:  Target=0.030, Peers=0.043, Gap=-0.013
+    OUT bias period: Target=0.035, Peers=0.042, Gap=-0.007
+    CHANGE in gap:   -0.005  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.1%, Peers=3.3%, Ratio=0.94x
+    IN bias period:  Target=3.1%, Peers=1.9%, Ratio=1.62x
+    OUT bias period: Target=3.0%, Peers=3.3%, Ratio=0.93x
+    CHANGE in ratio: +0.69x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.69x during bias periods
+
+[6/21] Analyzing: 0R0P.L
+  → Found 1 peer folders for 0R0P.L
+  Target's bias quarters: [(2012, 4), (2013, 1), (2013, 2), (2013, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   390 statements
+    Target OUT bias periods: 3115 statements
+    Peers IN bias periods:     90 statements
+    Peers OUT bias periods:  4679 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.056, Peers=0.045, Gap=+0.011
+    IN bias period:  Target=0.090, Peers=0.056, Gap=+0.033
+    OUT bias period: Target=0.056, Peers=0.048, Gap=+0.008
+    CHANGE in gap:   +0.025  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.5%, Peers=3.6%, Ratio=0.98x
+    IN bias period:  Target=2.2%, Peers=3.9%, Ratio=0.56x
+    OUT bias period: Target=3.5%, Peers=3.6%, Ratio=0.99x
+    CHANGE in ratio: -0.43x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio decreased by 0.43x during bias periods
+
+[7/21] Analyzing: GRPN
+  → Found 2 peer folders for GRPN
+  Target's bias quarters: [(2013, 1), (2013, 2), (2013, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   281 statements
+    Target OUT bias periods: 4062 statements
+    Peers IN bias periods:     82 statements
+    Peers OUT bias periods:  3876 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.039, Peers=0.055, Gap=-0.016
+    IN bias period:  Target=0.061, Peers=0.086, Gap=-0.026
+    OUT bias period: Target=0.041, Peers=0.049, Gap=-0.008
+    CHANGE in gap:   -0.018  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.5%, Ratio=1.04x
+    IN bias period:  Target=2.6%, Peers=4.1%, Ratio=0.64x
+    OUT bias period: Target=3.7%, Peers=3.5%, Ratio=1.04x
+    CHANGE in ratio: -0.40x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio decreased by 0.40x during bias periods
+
+[8/21] Analyzing: HOOD
+  → Found 17 peer folders for HOOD
+  Target's bias quarters: [(2021, 3), (2021, 4), (2022, 1), (2022, 2), (2022, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   526 statements
+    Target OUT bias periods:  942 statements
+    Peers IN bias periods:   1663 statements
+    Peers OUT bias periods:  9281 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.041, Peers=0.048, Gap=-0.007
+    IN bias period:  Target=0.046, Peers=0.052, Gap=-0.006
+    OUT bias period: Target=0.041, Peers=0.048, Gap=-0.007
+    CHANGE in gap:   +0.001  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.4%, Peers=3.6%, Ratio=0.95x
+    IN bias period:  Target=4.1%, Peers=3.4%, Ratio=1.21x
+    OUT bias period: Target=3.7%, Peers=3.8%, Ratio=0.97x
+    CHANGE in ratio: +0.25x  
+
+[9/21] Analyzing: INTC
+  → Found 24 peer folders for INTC
+  Target's bias quarters: [(2021, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   137 statements
+    Target OUT bias periods: 5763 statements
+    Peers IN bias periods:   1067 statements
+    Peers OUT bias periods:  52464 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.037, Peers=0.047, Gap=-0.011
+    IN bias period:  Target=0.035, Peers=0.053, Gap=-0.018
+    OUT bias period: Target=0.038, Peers=0.048, Gap=-0.010
+    CHANGE in gap:   -0.008  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.9%, Peers=3.6%, Ratio=1.08x
+    IN bias period:  Target=2.5%, Peers=1.9%, Ratio=1.28x
+    OUT bias period: Target=3.8%, Peers=3.6%, Ratio=1.07x
+    CHANGE in ratio: +0.21x  
+
+[10/21] Analyzing: KBNT
+  → Found 23 peer folders for KBNT
+  Target's bias quarters: [(2024, 4)]
+  Temporal segmentation:
+    Target IN bias periods:     0 statements
+    Target OUT bias periods:  937 statements
+    Peers IN bias periods:   1087 statements
+    Peers OUT bias periods:  25507 statements
+  ⚠️  Insufficient data in bias periods (target: 30+, peers: 50+ needed), using all-time comparison only
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.044, Peers=0.049, Gap=-0.005
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.12x
+
+[11/21] Analyzing: NKLA
+  → Found 10 peer folders for NKLA
+  Target's bias quarters: [(2020, 4), (2021, 1), (2021, 2), (2021, 3), (2021, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   305 statements
+    Target OUT bias periods:  700 statements
+    Peers IN bias periods:   1730 statements
+    Peers OUT bias periods:  5605 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.031, Peers=0.042, Gap=-0.011
+    IN bias period:  Target=0.039, Peers=0.046, Gap=-0.006
+    OUT bias period: Target=0.029, Peers=0.040, Gap=-0.011
+    CHANGE in gap:   +0.005  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.3%, Peers=3.5%, Ratio=0.94x
+    IN bias period:  Target=3.1%, Peers=2.8%, Ratio=1.14x
+    OUT bias period: Target=2.5%, Peers=3.4%, Ratio=0.73x
+    CHANGE in ratio: +0.41x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.41x during bias periods
+
+[12/21] Analyzing: NWT.DE
+  → Found 32 peer folders for WFC
+  Target's bias quarters: [(2016, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   144 statements
+    Target OUT bias periods: 3510 statements
+    Peers IN bias periods:    717 statements
+    Peers OUT bias periods:  18875 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.023, Peers=0.030, Gap=-0.008
+    IN bias period:  Target=0.037, Peers=0.039, Gap=-0.002
+    OUT bias period: Target=0.027, Peers=0.031, Gap=-0.003
+    CHANGE in gap:   +0.001  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=4.0%, Ratio=0.94x
+    IN bias period:  Target=2.3%, Peers=2.4%, Ratio=0.96x
+    OUT bias period: Target=3.8%, Peers=3.9%, Ratio=0.99x
+    CHANGE in ratio: -0.03x  
+
+[13/21] Analyzing: OTRK
+  → Found 17 peer folders for OTRK
+  Target's bias quarters: [(2021, 1)]
+  Temporal segmentation:
+    Target IN bias periods:    72 statements
+    Target OUT bias periods:  641 statements
+    Peers IN bias periods:    200 statements
+    Peers OUT bias periods:  4904 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.057, Peers=0.048, Gap=+0.009
+    IN bias period:  Target=0.036, Peers=0.051, Gap=-0.015
+    OUT bias period: Target=0.061, Peers=0.048, Gap=+0.013
+    CHANGE in gap:   -0.028  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.0%, Peers=3.3%, Ratio=0.93x
+    IN bias period:  Target=4.9%, Peers=1.9%, Ratio=2.58x
+    OUT bias period: Target=2.6%, Peers=3.3%, Ratio=0.78x
+    CHANGE in ratio: +1.80x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 1.80x during bias periods
+
+[14/21] Analyzing: PTON
+  → Found 6 peer folders for PTON
+  Target's bias quarters: [(2021, 4), (2022, 1)]
+  Temporal segmentation:
+    Target IN bias periods:   232 statements
+    Target OUT bias periods:  937 statements
+    Peers IN bias periods:    376 statements
+    Peers OUT bias periods:  10390 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.045, Peers=0.049, Gap=-0.004
+    IN bias period:  Target=0.046, Peers=0.054, Gap=-0.008
+    OUT bias period: Target=0.044, Peers=0.049, Gap=-0.005
+    CHANGE in gap:   -0.003  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=2.9%, Peers=3.6%, Ratio=0.81x
+    IN bias period:  Target=3.7%, Peers=2.7%, Ratio=1.38x
+    OUT bias period: Target=3.4%, Peers=3.7%, Ratio=0.91x
+    CHANGE in ratio: +0.48x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.48x during bias periods
+
+[15/21] Analyzing: RNO.PA
+  → Found 17 peer folders for RNO.PA
+  Target's bias quarters: [(2018, 4), (2019, 1)]
+  Temporal segmentation:
+    Target IN bias periods:   227 statements
+    Target OUT bias periods: 1821 statements
+    Peers IN bias periods:    920 statements
+    Peers OUT bias periods:  16538 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.038, Peers=0.044, Gap=-0.007
+    IN bias period:  Target=0.032, Peers=0.040, Gap=-0.008
+    OUT bias period: Target=0.041, Peers=0.043, Gap=-0.002
+    CHANGE in gap:   -0.006  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=4.0%, Peers=2.8%, Ratio=1.42x
+    IN bias period:  Target=2.9%, Peers=2.7%, Ratio=1.08x
+    OUT bias period: Target=3.7%, Peers=2.9%, Ratio=1.28x
+    CHANGE in ratio: -0.21x  
+
+[16/21] Analyzing: TL0.DE
+  → Found 22 peer folders for TSLA
+  Target's bias quarters: [(2018, 3)]
+  Temporal segmentation:
+    Target IN bias periods:    78 statements
+    Target OUT bias periods: 2034 statements
+    Peers IN bias periods:    621 statements
+    Peers OUT bias periods:  19043 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.030, Peers=0.045, Gap=-0.015
+    IN bias period:  Target=0.033, Peers=0.039, Gap=-0.006
+    OUT bias period: Target=0.030, Peers=0.046, Gap=-0.016
+    CHANGE in gap:   +0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.6%, Peers=3.0%, Ratio=1.19x
+    IN bias period:  Target=3.3%, Peers=1.9%, Ratio=1.76x
+    OUT bias period: Target=3.5%, Peers=3.0%, Ratio=1.17x
+    CHANGE in ratio: +0.59x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.59x during bias periods
+
+[17/21] Analyzing: TWTR
+  → Found 5 peer folders for TWTR
+  Target's bias quarters: [(2018, 3), (2018, 4), (2019, 1), (2019, 2), (2019, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   323 statements
+    Target OUT bias periods: 1595 statements
+    Peers IN bias periods:    934 statements
+    Peers OUT bias periods:  9617 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.054, Peers=0.050, Gap=+0.004
+    IN bias period:  Target=0.062, Peers=0.057, Gap=+0.005
+    OUT bias period: Target=0.053, Peers=0.051, Gap=+0.002
+    CHANGE in gap:   +0.004  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.5%, Ratio=1.07x
+    IN bias period:  Target=4.0%, Peers=2.9%, Ratio=1.40x
+    OUT bias period: Target=3.4%, Peers=3.5%, Ratio=0.97x
+    CHANGE in ratio: +0.44x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.44x during bias periods
+
+[18/21] Analyzing: VOW3.DE
+  → Found 22 peer folders for VOW3.DE
+  Target's bias quarters: [(2015, 4), (2016, 1), (2016, 2), (2016, 3), (2016, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   419 statements
+    Target OUT bias periods: 2255 statements
+    Peers IN bias periods:   2197 statements
+    Peers OUT bias periods:  16905 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.043, Peers=0.044, Gap=-0.001
+    IN bias period:  Target=0.052, Peers=0.041, Gap=+0.012
+    OUT bias period: Target=0.042, Peers=0.044, Gap=-0.002
+    CHANGE in gap:   +0.014  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.5%, Peers=3.0%, Ratio=1.17x
+    IN bias period:  Target=3.0%, Peers=2.7%, Ratio=1.10x
+    OUT bias period: Target=3.9%, Peers=3.0%, Ratio=1.29x
+    CHANGE in ratio: -0.19x  
+
+[19/21] Analyzing: SNAP
+  → Found 15 peer folders for SNAP
+  Target's bias quarters: [(2022, 1), (2022, 2), (2022, 3), (2022, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   138 statements
+    Target OUT bias periods: 2030 statements
+    Peers IN bias periods:    897 statements
+    Peers OUT bias periods:  9654 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.057, Peers=0.050, Gap=+0.007
+    IN bias period:  Target=0.062, Peers=0.062, Gap=-0.001
+    OUT bias period: Target=0.057, Peers=0.049, Gap=+0.008
+    CHANGE in gap:   -0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=2.7%, Peers=3.5%, Ratio=0.76x
+    IN bias period:  Target=2.2%, Peers=2.8%, Ratio=0.79x
+    OUT bias period: Target=2.7%, Peers=3.5%, Ratio=0.78x
+    CHANGE in ratio: +0.01x  
+
+[20/21] Analyzing: BHC.TO
+  → Found 21 peer folders for BHC
+  Target's bias quarters: [(2015, 4), (2016, 1), (2016, 2), (2016, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   612 statements
+    Target OUT bias periods: 2511 statements
+    Peers IN bias periods:   1381 statements
+    Peers OUT bias periods:  6858 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.039, Peers=0.046, Gap=-0.007
+    IN bias period:  Target=0.039, Peers=0.045, Gap=-0.006
+    OUT bias period: Target=0.040, Peers=0.047, Gap=-0.007
+    CHANGE in gap:   +0.000  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=4.0%, Peers=3.4%, Ratio=1.16x
+    IN bias period:  Target=3.6%, Peers=3.6%, Ratio=1.00x
+    OUT bias period: Target=3.8%, Peers=3.3%, Ratio=1.14x
+    CHANGE in ratio: -0.13x  
+
+[21/21] Analyzing: BOE.L
+  → Found 14 peer folders for BA
+  Target's bias quarters: [(2019, 2), (2019, 3), (2019, 4), (2020, 1), (2020, 2), (2020, 3), (2020, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   945 statements
+    Target OUT bias periods: 2482 statements
+    Peers IN bias periods:   2165 statements
+    Peers OUT bias periods:  6005 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.040, Peers=0.039, Gap=+0.001
+    IN bias period:  Target=0.037, Peers=0.045, Gap=-0.008
+    OUT bias period: Target=0.040, Peers=0.038, Gap=+0.002
+    CHANGE in gap:   -0.010  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.9%, Peers=3.3%, Ratio=1.16x
+    IN bias period:  Target=3.5%, Peers=2.5%, Ratio=1.40x
+    OUT bias period: Target=3.3%, Peers=3.5%, Ratio=0.95x
+    CHANGE in ratio: +0.45x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.45x during bias periods
+
+--------------------------------------------------------------------------------
+SUMMARY: Per-Firm Analysis with Temporal Segmentation
+--------------------------------------------------------------------------------
+  Analyzed: 21 target firms
+  Firms with bias period data: 20/21
+  Flagged as unusual: 11 (52.4%)
+
+  Flagged firms:
+    • EXC: outlier change +1.21x
+    • KSS: outlier change +0.86x
+    • UAL: outlier change +0.69x
+    • 0R0P.L: outlier change -0.43x
+    • GRPN: outlier change -0.40x
+    • NKLA: outlier change +0.41x
+    • OTRK: outlier change +1.80x
+    • PTON: outlier change +0.48x
+    • TSLA: outlier change +0.59x
+    • TWTR: outlier change +0.44x
+    • BA: outlier change +0.45x
+
+  Temporal Change Statistics (firms with bias data):
+    Coherence change: mean=-0.003, std=0.013, range=[-0.028, +0.025]
+    Outlier change:   mean=+0.29x, std=0.56x, range=[-0.43x, +1.80x]
+
+================================================================================
+DIMENSIONALITY REDUCTION: PCA vs UMAP
+================================================================================
+
+5. Dimensionality Reduction (PCA)
+==================================================
+Running PCA (n_components=2)...
+✓ PCA complete: shape = (269683, 2)
+  Explained variance: [0.06096283 0.04458869]
+
+5. Dimensionality Reduction (UMAP)
+==================================================
+Running UMAP (n_components=2)...
+✓ UMAP complete: shape = (269683, 2)
+
+Reducing topic-adjusted embeddings...
+
+5. Dimensionality Reduction (UMAP)
+==================================================
+Running UMAP (n_components=2)...
+✓ UMAP complete: shape = (269683, 2)
+  ✓ Topic-adjusted UMAP coordinates computed
+  → Use for visualization of attribution style without topic confound
+
+10. Saving Results
+================================================================================
+✓ Saved embeddings: output\embeddings\embedding_vectors_20251025_045627.npy
+✓ Saved topic-adjusted embeddings: output\embeddings\embedding_vectors_topic_adjusted_20251025_045627.npy
+✓ Saved metadata: output\embeddings\embedding_metadata_20251025_045627.csv
+✓ Saved UMAP coordinates: output\embeddings\umap_coordinates_20251025_045627.csv
+✓ Saved PCA 2D coordinates: output\embeddings\pca_coordinates_2d_20251025_045627.csv
+✓ Saved topic-adjusted UMAP coordinates: output\embeddings\umap_coordinates_topic_adjusted_20251025_045627.csv
+✓ Saved topic temporal consistency: output\embeddings\topic_temporal_consistency_20251025_045627.csv
+✓ Saved topic consistency outliers: output\embeddings\topic_consistency_outliers_20251025_045627.csv (38523 outliers)
+✓ Saved semantic subspace features: output\embeddings\subspace_features_20251025_045627.csv (7 features)
+✓ Saved PCA embeddings: output\embeddings\pca_embeddings_20251025_045627.npy
+✓ Saved PCA coordinates: output\embeddings\pca_coordinates_20251025_045627.csv
+✓ Saved engineered features: output\embeddings\embedding_features_20251025_045627.csv
+✓ Saved company-level stats: output\embeddings\company_level_stats_20251025_045627.csv
+✓ Saved per-firm analysis: output\embeddings\per_firm_analysis_20251025_045627.csv

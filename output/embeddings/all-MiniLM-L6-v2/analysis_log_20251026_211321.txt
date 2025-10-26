@@ -1,0 +1,967 @@
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+✓ Model loaded successfully
+
+Initialized EmbeddingAnalyzer
+  Input: classification_results
+  Config: company_config.json
+  Log file: output\embeddings\analysis_log_20251026_211321.txt
+  Benchmark: output\peer_validation
+  Output: output\embeddings
+  Peer groups loaded: 23
+  Embedding source: SentenceTransformers
+
+================================================================================
+BIAS RE-ANALYSIS MODE (Loading Pre-Computed Embeddings)
+================================================================================
+
+1. Loading Pre-Computed Data from Disk
+================================================================================
+✓ Found 1 embedding metadata file(s)
+  Using most recent: embedding_metadata_20251025_045627.csv
+  Loaded 269,683 attribution statements
+✓ Found 1 embedding file(s)
+  Using most recent: embedding_vectors_20251025_045627.npy
+  Loaded embeddings: (269683, 384)
+✓ Found 1 topic-adjusted embedding file(s)
+  Using most recent: embedding_vectors_topic_adjusted_20251025_045627.npy
+  Loaded topic-adjusted embeddings: (269683, 384)
+
+2. Loading Expert-Identified Bias Periods from Config
+================================================================================
+
+📊 Loading Expert-Identified Bias Periods
+================================================================================
+✓ Extracted expert periods for 23 companies
+✓ Total company-quarters flagged: 172
+  - Exact periods: 80
+  - ±1Q window: 46
+  - ±2Q window: 46
+
+  Sample companies with expert periods:
+    • INTC: Blame/Defensiveness/Evasion
+    • SNAP: Blame/Defensiveness/Evasion
+    • BBBY: Overconfidence
+    • EFX: Blame/Defensiveness/Evasion
+    • EXC: Blame/Defensiveness/Evasion
+    ... and 18 more
+
+2b. Applying Bias Period Labels to DataFrame
+================================================================================
+  Segments in expert periods: 13,411 (5.0%)
+  Segments in normal periods: 256,272 (95.0%)
+
+3. Re-Running Bias-Related Analyses
+================================================================================
+
+[1/6] Multi-Level Embedding Aggregation
+--------------------------------------------------------------------------------
+Computing aggregations at 5 levels: attribution-type, section, attr vs non-attr, quarter, company
+
+2b. Aggregating Multi-Level Embeddings
+================================================================================
+
+  Level 1: Attribution-Type Aggregation
+    ✓ Aggregated 15687 attribution-type groups
+
+  Level 2: Section Aggregation
+    ✓ Aggregated 6321 section groups
+
+  Level 3: Attribution vs Non-Attribution
+    ✓ Aggregated 3216 attribution/non-attribution groups
+
+  Level 4: Company-Quarter Aggregation
+    ✓ Aggregated 3216 company-quarters
+
+  Level 5: Company Overall Aggregation
+    ✓ Aggregated 134 companies overall
+
+✓ Multi-level aggregation complete
+  5 levels analyzed: attribution-type, section, attr vs non-attr, quarter, company
+✓ Saved multilevel embedding stats early: output\embeddings\multilevel_embedding_stats_20251026_211335.csv
+  → Freeing ~2-3 GB of memory
+✓ Multi-level aggregations saved to disk
+
+[2/6] Supervised Classification - Bias Prediction (WITH NEW FEATURES)
+--------------------------------------------------------------------------------
+
+4b. Supervised Classification: Expert Period Prediction
+================================================================================
+Testing: Do embeddings detect patterns around expert periods that GPT SAB analysis missed?
+
+Labeled Data:
+  Expert periods: 13,411 segments (5.0%)
+  Normal periods: 256,272 segments (95.0%)
+
+1. GPT Baseline Model (6 features: pos_internal, neg_external, pos_external, neg_internal, asymmetry, SAB_proportion)
+   GPT Baseline AUC: 0.719
+
+2. Embedding Model (384 features)
+   Embedding AUC: 0.765
+
+3. Combined Model (GPT + Embedding: 390 features)
+   Combined AUC: 0.810
+
+================================================================================
+HYPOTHESIS TEST RESULTS:
+================================================================================
+
+GPT Baseline:           AUC = 0.719
+Embedding Only:         AUC = 0.765  (Δ = +0.047)
+Combined (GPT + Embed): AUC = 0.810  (Δ = +0.092)
+
+✓ HYPOTHESIS CONFIRMED: Embeddings detect linguistic patterns around expert periods
+  Even though SAB proportions show no difference, embeddings capture other signals
+  (e.g., tone, complexity, semantic coherence, defensiveness)
+
+[3/6] Bias Vector Extraction
+--------------------------------------------------------------------------------
+
+7. Extracting Linguistic Signature Vector
+================================================================================
+Computing direction in embedding space that captures expert-period patterns
+
+  Expert period samples: 13,411
+  Normal period samples: 256,272
+
+✓ Linguistic signature vector extracted
+  Separation magnitude: 0.0445
+  (Larger = stronger linguistic distinction between expert/normal periods)
+
+  Signature Score Distribution:
+    Expert period mean: +0.036 (std: 0.104)
+    Normal period mean: -0.009 (std: 0.103)
+    Score separation: 0.044
+    Cohen's d effect size: 0.430
+    → SMALL effect
+
+  Usage: signature_score = dot(new_embedding, signature_vector_normalized)
+         Positive score → Expert-period linguistic pattern
+         Negative score → Normal-period linguistic pattern
+
+[4/6] Bias Period Comparison
+--------------------------------------------------------------------------------
+
+6. Comparing Expert Period vs Normal Period Embeddings
+================================================================================
+  Expert period segments: 13,411
+  Normal period segments: 256,272
+
+Period Comparison Results:
+  Euclidean distance: 0.0445
+  Cosine similarity: 0.996
+  Expert period variance: 0.0435
+  Normal period variance: 0.0435
+  ✗ No clear embedding difference between periods
+  → Language patterns similar across expert and normal periods
+
+[5/6] PCA Analysis with Bias Correlation
+--------------------------------------------------------------------------------
+
+9. Principal Component Analysis (PCA)
+================================================================================
+Reducing 384-D embeddings to 50 principal components
+
+  Fitting PCA...
+✓ PCA complete
+
+  Variance Explained:
+    Top 10 components: 26.8%
+    Top 20 components: 37.8%
+    All 50 components: 56.7%
+
+  Suggested elbow point: 1 components
+    (Captures 6.1% of variance)
+
+  Target vs Peer Separation in PCA Space:
+    Separation in full space: 0.0326
+    Separation in PCA space: 0.0275
+    Retained separation: 84.3%
+
+  Correlating Components with Expert Periods:
+
+    Components Most Correlated with Expert Periods (Top 5):
+      PC 7: r=-0.031 ***  (explains 1.9% variance)
+      PC 3: r=+0.020 ***  (explains 2.9% variance)
+      PC 5: r=-0.019 ***  (explains 2.1% variance)
+      PC 1: r=+0.010 ***  (explains 6.1% variance)
+      PC 6: r=+0.009 ***  (explains 2.1% variance)
+
+  Usage:
+    - Use top 1 components for classification
+    - Use PC1 & PC2 for 2D visualization
+    - Examine component loadings to understand linguistic dimensions
+
+[6/7] Per-Firm Analysis (IN-FIRM metrics for RAW and TOPIC-ADJUSTED)
+--------------------------------------------------------------------------------
+
+================================================================================
+PER-FIRM STRATIFIED ANALYSIS (WITH TEMPORAL SEGMENTATION)
+================================================================================
+Goal: Identify if targets show DIFFERENT patterns during bias periods vs normal periods
+
+
+[1/21] Analyzing: 0HMI.L
+  → Found 23 peer folders for BBBY
+  Target's bias quarters: [(2020, 2), (2020, 3), (2020, 4), (2021, 1), (2021, 2), (2021, 3), (2021, 4), (2022, 1), (2022, 2), (2022, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   639 statements
+    Target OUT bias periods: 1173 statements
+    Peers IN bias periods:   9137 statements
+    Peers OUT bias periods:  18834 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.029, Peers=0.041, Gap=-0.013
+    IN bias period:  Target=0.027, Peers=0.045, Gap=-0.018
+    OUT bias period: Target=0.035, Peers=0.044, Gap=-0.009
+    CHANGE in gap:   -0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.6%, Peers=3.6%, Ratio=1.00x
+    IN bias period:  Target=3.5%, Peers=3.3%, Ratio=1.09x
+    OUT bias period: Target=3.3%, Peers=3.6%, Ratio=0.92x
+    CHANGE in ratio: +0.16x  
+
+[2/21] Analyzing: 0II3.L
+  → Found 19 peer folders for EFX
+  Target's bias quarters: [(2017, 4), (2018, 1), (2018, 2), (2018, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   610 statements
+    Target OUT bias periods: 3481 statements
+    Peers IN bias periods:   2243 statements
+    Peers OUT bias periods:  9708 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.047, Peers=0.045, Gap=+0.002
+    IN bias period:  Target=0.063, Peers=0.051, Gap=+0.012
+    OUT bias period: Target=0.045, Peers=0.048, Gap=-0.003
+    CHANGE in gap:   +0.015  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.11x
+    IN bias period:  Target=2.5%, Peers=3.0%, Ratio=0.85x
+    OUT bias period: Target=3.8%, Peers=3.3%, Ratio=1.14x
+    CHANGE in ratio: -0.29x  
+
+[3/21] Analyzing: 0IJN.L
+  → Found 39 peer folders for EXC
+  Target's bias quarters: [(2023, 1)]
+  Temporal segmentation:
+    Target IN bias periods:    84 statements
+    Target OUT bias periods: 1332 statements
+    Peers IN bias periods:    737 statements
+    Peers OUT bias periods:  19254 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.040, Peers=0.044, Gap=-0.004
+    IN bias period:  Target=0.038, Peers=0.058, Gap=-0.020
+    OUT bias period: Target=0.042, Peers=0.043, Gap=-0.001
+    CHANGE in gap:   -0.019  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.11x
+    IN bias period:  Target=2.7%, Peers=1.2%, Ratio=2.32x
+    OUT bias period: Target=3.6%, Peers=3.3%, Ratio=1.10x
+    CHANGE in ratio: +1.21x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 1.21x during bias periods
+
+[4/21] Analyzing: 0JRL.L
+  → Found 18 peer folders for KSS
+  Target's bias quarters: [(2024, 3)]
+  Temporal segmentation:
+    Target IN bias periods:    78 statements
+    Target OUT bias periods: 1177 statements
+    Peers IN bias periods:    654 statements
+    Peers OUT bias periods:  14842 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.046, Peers=0.043, Gap=+0.003
+    IN bias period:  Target=0.062, Peers=0.056, Gap=+0.006
+    OUT bias period: Target=0.061, Peers=0.043, Gap=+0.018
+    CHANGE in gap:   -0.013  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.4%, Peers=3.7%, Ratio=0.91x
+    IN bias period:  Target=4.4%, Peers=2.3%, Ratio=1.90x
+    OUT bias period: Target=3.9%, Peers=3.8%, Ratio=1.04x
+    CHANGE in ratio: +0.86x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.86x during bias periods
+
+[5/21] Analyzing: 0LIU.L
+  → Found 23 peer folders for UAL
+  Target's bias quarters: [(2017, 2), (2017, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   175 statements
+    Target OUT bias periods: 1329 statements
+    Peers IN bias periods:    687 statements
+    Peers OUT bias periods:  7989 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.031, Peers=0.043, Gap=-0.012
+    IN bias period:  Target=0.030, Peers=0.043, Gap=-0.013
+    OUT bias period: Target=0.035, Peers=0.042, Gap=-0.007
+    CHANGE in gap:   -0.005  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.1%, Peers=3.3%, Ratio=0.94x
+    IN bias period:  Target=3.1%, Peers=1.9%, Ratio=1.62x
+    OUT bias period: Target=3.0%, Peers=3.3%, Ratio=0.93x
+    CHANGE in ratio: +0.69x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.69x during bias periods
+
+[6/21] Analyzing: 0R0P.L
+  → Found 1 peer folders for 0R0P.L
+  Target's bias quarters: [(2012, 4), (2013, 1), (2013, 2), (2013, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   390 statements
+    Target OUT bias periods: 3115 statements
+    Peers IN bias periods:     90 statements
+    Peers OUT bias periods:  4679 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.056, Peers=0.045, Gap=+0.011
+    IN bias period:  Target=0.090, Peers=0.056, Gap=+0.033
+    OUT bias period: Target=0.056, Peers=0.048, Gap=+0.008
+    CHANGE in gap:   +0.025  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.5%, Peers=3.6%, Ratio=0.98x
+    IN bias period:  Target=2.2%, Peers=3.9%, Ratio=0.56x
+    OUT bias period: Target=3.5%, Peers=3.6%, Ratio=0.99x
+    CHANGE in ratio: -0.43x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio decreased by 0.43x during bias periods
+
+[7/21] Analyzing: GRPN
+  → Found 2 peer folders for GRPN
+  Target's bias quarters: [(2013, 1), (2013, 2), (2013, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   281 statements
+    Target OUT bias periods: 4062 statements
+    Peers IN bias periods:     82 statements
+    Peers OUT bias periods:  3876 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.039, Peers=0.055, Gap=-0.016
+    IN bias period:  Target=0.061, Peers=0.086, Gap=-0.026
+    OUT bias period: Target=0.041, Peers=0.049, Gap=-0.008
+    CHANGE in gap:   -0.018  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.5%, Ratio=1.04x
+    IN bias period:  Target=2.6%, Peers=4.1%, Ratio=0.64x
+    OUT bias period: Target=3.7%, Peers=3.5%, Ratio=1.04x
+    CHANGE in ratio: -0.40x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio decreased by 0.40x during bias periods
+
+[8/21] Analyzing: HOOD
+  → Found 17 peer folders for HOOD
+  Target's bias quarters: [(2021, 3), (2021, 4), (2022, 1), (2022, 2), (2022, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   526 statements
+    Target OUT bias periods:  942 statements
+    Peers IN bias periods:   1663 statements
+    Peers OUT bias periods:  9281 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.041, Peers=0.048, Gap=-0.007
+    IN bias period:  Target=0.046, Peers=0.052, Gap=-0.006
+    OUT bias period: Target=0.041, Peers=0.048, Gap=-0.007
+    CHANGE in gap:   +0.001  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.4%, Peers=3.6%, Ratio=0.95x
+    IN bias period:  Target=4.1%, Peers=3.4%, Ratio=1.21x
+    OUT bias period: Target=3.7%, Peers=3.8%, Ratio=0.97x
+    CHANGE in ratio: +0.25x  
+
+[9/21] Analyzing: INTC
+  → Found 24 peer folders for INTC
+  Target's bias quarters: [(2021, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   137 statements
+    Target OUT bias periods: 5763 statements
+    Peers IN bias periods:   1067 statements
+    Peers OUT bias periods:  52464 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.037, Peers=0.047, Gap=-0.011
+    IN bias period:  Target=0.035, Peers=0.053, Gap=-0.018
+    OUT bias period: Target=0.038, Peers=0.048, Gap=-0.010
+    CHANGE in gap:   -0.008  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.9%, Peers=3.6%, Ratio=1.08x
+    IN bias period:  Target=2.5%, Peers=1.9%, Ratio=1.28x
+    OUT bias period: Target=3.8%, Peers=3.6%, Ratio=1.07x
+    CHANGE in ratio: +0.21x  
+
+[10/21] Analyzing: KBNT
+  → Found 23 peer folders for KBNT
+  Target's bias quarters: [(2024, 4)]
+  Temporal segmentation:
+    Target IN bias periods:     0 statements
+    Target OUT bias periods:  937 statements
+    Peers IN bias periods:   1087 statements
+    Peers OUT bias periods:  25507 statements
+  ⚠️  Insufficient data in bias periods (target: 30+, peers: 50+ needed), using all-time comparison only
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.044, Peers=0.049, Gap=-0.005
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.3%, Ratio=1.12x
+
+[11/21] Analyzing: NKLA
+  → Found 10 peer folders for NKLA
+  Target's bias quarters: [(2020, 4), (2021, 1), (2021, 2), (2021, 3), (2021, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   305 statements
+    Target OUT bias periods:  700 statements
+    Peers IN bias periods:   1730 statements
+    Peers OUT bias periods:  5605 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.031, Peers=0.042, Gap=-0.011
+    IN bias period:  Target=0.039, Peers=0.046, Gap=-0.006
+    OUT bias period: Target=0.029, Peers=0.040, Gap=-0.011
+    CHANGE in gap:   +0.005  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.3%, Peers=3.5%, Ratio=0.94x
+    IN bias period:  Target=3.1%, Peers=2.8%, Ratio=1.14x
+    OUT bias period: Target=2.5%, Peers=3.4%, Ratio=0.73x
+    CHANGE in ratio: +0.41x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.41x during bias periods
+
+[12/21] Analyzing: NWT.DE
+  → Found 32 peer folders for WFC
+  Target's bias quarters: [(2016, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   144 statements
+    Target OUT bias periods: 3510 statements
+    Peers IN bias periods:    717 statements
+    Peers OUT bias periods:  18875 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.023, Peers=0.030, Gap=-0.008
+    IN bias period:  Target=0.037, Peers=0.039, Gap=-0.002
+    OUT bias period: Target=0.027, Peers=0.031, Gap=-0.003
+    CHANGE in gap:   +0.001  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=4.0%, Ratio=0.94x
+    IN bias period:  Target=2.3%, Peers=2.4%, Ratio=0.96x
+    OUT bias period: Target=3.8%, Peers=3.9%, Ratio=0.99x
+    CHANGE in ratio: -0.03x  
+
+[13/21] Analyzing: OTRK
+  → Found 17 peer folders for OTRK
+  Target's bias quarters: [(2021, 1)]
+  Temporal segmentation:
+    Target IN bias periods:    72 statements
+    Target OUT bias periods:  641 statements
+    Peers IN bias periods:    200 statements
+    Peers OUT bias periods:  4904 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.057, Peers=0.048, Gap=+0.009
+    IN bias period:  Target=0.036, Peers=0.051, Gap=-0.015
+    OUT bias period: Target=0.061, Peers=0.048, Gap=+0.013
+    CHANGE in gap:   -0.028  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.0%, Peers=3.3%, Ratio=0.93x
+    IN bias period:  Target=4.9%, Peers=1.9%, Ratio=2.58x
+    OUT bias period: Target=2.6%, Peers=3.3%, Ratio=0.78x
+    CHANGE in ratio: +1.80x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 1.80x during bias periods
+
+[14/21] Analyzing: PTON
+  → Found 6 peer folders for PTON
+  Target's bias quarters: [(2021, 4), (2022, 1)]
+  Temporal segmentation:
+    Target IN bias periods:   232 statements
+    Target OUT bias periods:  937 statements
+    Peers IN bias periods:    376 statements
+    Peers OUT bias periods:  10390 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.045, Peers=0.049, Gap=-0.004
+    IN bias period:  Target=0.046, Peers=0.054, Gap=-0.008
+    OUT bias period: Target=0.044, Peers=0.049, Gap=-0.005
+    CHANGE in gap:   -0.003  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=2.9%, Peers=3.6%, Ratio=0.81x
+    IN bias period:  Target=3.7%, Peers=2.7%, Ratio=1.38x
+    OUT bias period: Target=3.4%, Peers=3.7%, Ratio=0.91x
+    CHANGE in ratio: +0.48x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.48x during bias periods
+
+[15/21] Analyzing: RNO.PA
+  → Found 17 peer folders for RNO.PA
+  Target's bias quarters: [(2018, 4), (2019, 1)]
+  Temporal segmentation:
+    Target IN bias periods:   227 statements
+    Target OUT bias periods: 1821 statements
+    Peers IN bias periods:    920 statements
+    Peers OUT bias periods:  16538 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.038, Peers=0.044, Gap=-0.007
+    IN bias period:  Target=0.032, Peers=0.040, Gap=-0.008
+    OUT bias period: Target=0.041, Peers=0.043, Gap=-0.002
+    CHANGE in gap:   -0.006  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=4.0%, Peers=2.8%, Ratio=1.42x
+    IN bias period:  Target=2.9%, Peers=2.7%, Ratio=1.08x
+    OUT bias period: Target=3.7%, Peers=2.9%, Ratio=1.28x
+    CHANGE in ratio: -0.21x  
+
+[16/21] Analyzing: TL0.DE
+  → Found 22 peer folders for TSLA
+  Target's bias quarters: [(2018, 3)]
+  Temporal segmentation:
+    Target IN bias periods:    78 statements
+    Target OUT bias periods: 2034 statements
+    Peers IN bias periods:    621 statements
+    Peers OUT bias periods:  19043 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.030, Peers=0.045, Gap=-0.015
+    IN bias period:  Target=0.033, Peers=0.039, Gap=-0.006
+    OUT bias period: Target=0.030, Peers=0.046, Gap=-0.016
+    CHANGE in gap:   +0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.6%, Peers=3.0%, Ratio=1.19x
+    IN bias period:  Target=3.3%, Peers=1.9%, Ratio=1.76x
+    OUT bias period: Target=3.5%, Peers=3.0%, Ratio=1.17x
+    CHANGE in ratio: +0.59x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.59x during bias periods
+
+[17/21] Analyzing: TWTR
+  → Found 5 peer folders for TWTR
+  Target's bias quarters: [(2018, 3), (2018, 4), (2019, 1), (2019, 2), (2019, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   323 statements
+    Target OUT bias periods: 1595 statements
+    Peers IN bias periods:    934 statements
+    Peers OUT bias periods:  9617 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.054, Peers=0.050, Gap=+0.004
+    IN bias period:  Target=0.062, Peers=0.057, Gap=+0.005
+    OUT bias period: Target=0.053, Peers=0.051, Gap=+0.002
+    CHANGE in gap:   +0.004  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.7%, Peers=3.5%, Ratio=1.07x
+    IN bias period:  Target=4.0%, Peers=2.9%, Ratio=1.40x
+    OUT bias period: Target=3.4%, Peers=3.5%, Ratio=0.97x
+    CHANGE in ratio: +0.44x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.44x during bias periods
+
+[18/21] Analyzing: VOW3.DE
+  → Found 22 peer folders for VOW3.DE
+  Target's bias quarters: [(2015, 4), (2016, 1), (2016, 2), (2016, 3), (2016, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   419 statements
+    Target OUT bias periods: 2255 statements
+    Peers IN bias periods:   2197 statements
+    Peers OUT bias periods:  16905 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.043, Peers=0.044, Gap=-0.001
+    IN bias period:  Target=0.052, Peers=0.041, Gap=+0.012
+    OUT bias period: Target=0.042, Peers=0.044, Gap=-0.002
+    CHANGE in gap:   +0.014  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.5%, Peers=3.0%, Ratio=1.17x
+    IN bias period:  Target=3.0%, Peers=2.7%, Ratio=1.10x
+    OUT bias period: Target=3.9%, Peers=3.0%, Ratio=1.29x
+    CHANGE in ratio: -0.19x  
+
+[19/21] Analyzing: SNAP
+  → Found 15 peer folders for SNAP
+  Target's bias quarters: [(2022, 1), (2022, 2), (2022, 3), (2022, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   138 statements
+    Target OUT bias periods: 2030 statements
+    Peers IN bias periods:    897 statements
+    Peers OUT bias periods:  9654 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.057, Peers=0.050, Gap=+0.007
+    IN bias period:  Target=0.062, Peers=0.062, Gap=-0.001
+    OUT bias period: Target=0.057, Peers=0.049, Gap=+0.008
+    CHANGE in gap:   -0.009  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=2.7%, Peers=3.5%, Ratio=0.76x
+    IN bias period:  Target=2.2%, Peers=2.8%, Ratio=0.79x
+    OUT bias period: Target=2.7%, Peers=3.5%, Ratio=0.78x
+    CHANGE in ratio: +0.01x  
+
+[20/21] Analyzing: BHC.TO
+  → Found 21 peer folders for BHC
+  Target's bias quarters: [(2015, 4), (2016, 1), (2016, 2), (2016, 3)]
+  Temporal segmentation:
+    Target IN bias periods:   612 statements
+    Target OUT bias periods: 2511 statements
+    Peers IN bias periods:   1381 statements
+    Peers OUT bias periods:  6858 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.039, Peers=0.046, Gap=-0.007
+    IN bias period:  Target=0.039, Peers=0.045, Gap=-0.006
+    OUT bias period: Target=0.040, Peers=0.047, Gap=-0.007
+    CHANGE in gap:   +0.000  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=4.0%, Peers=3.4%, Ratio=1.16x
+    IN bias period:  Target=3.6%, Peers=3.6%, Ratio=1.00x
+    OUT bias period: Target=3.8%, Peers=3.3%, Ratio=1.14x
+    CHANGE in ratio: -0.13x  
+
+[21/21] Analyzing: BOE.L
+  → Found 14 peer folders for BA
+  Target's bias quarters: [(2019, 2), (2019, 3), (2019, 4), (2020, 1), (2020, 2), (2020, 3), (2020, 4)]
+  Temporal segmentation:
+    Target IN bias periods:   945 statements
+    Target OUT bias periods: 2482 statements
+    Peers IN bias periods:   2165 statements
+    Peers OUT bias periods:  6005 statements
+  ✓ Sufficient bias period data for temporal analysis
+
+  COHERENCE (lower = more variable/less consistent language):
+    All-time:        Target=0.040, Peers=0.039, Gap=+0.001
+    IN bias period:  Target=0.037, Peers=0.045, Gap=-0.008
+    OUT bias period: Target=0.040, Peers=0.038, Gap=+0.002
+    CHANGE in gap:   -0.010  
+
+  OUTLIER RATE (% statements inconsistent with historical topics):
+    All-time:        Target=3.9%, Peers=3.3%, Ratio=1.16x
+    IN bias period:  Target=3.5%, Peers=2.5%, Ratio=1.40x
+    OUT bias period: Target=3.3%, Peers=3.5%, Ratio=0.95x
+    CHANGE in ratio: +0.45x  🚩 FLAGGED
+
+  🚩 UNUSUAL PATTERN DETECTED:
+    - Outlier ratio increased by 0.45x during bias periods
+
+--------------------------------------------------------------------------------
+SUMMARY: Per-Firm Analysis with Temporal Segmentation
+--------------------------------------------------------------------------------
+  Analyzed: 21 target firms
+  Firms with bias period data: 20/21
+  Flagged as unusual: 11 (52.4%)
+
+  Flagged firms:
+    • EXC: outlier change +1.21x
+    • KSS: outlier change +0.86x
+    • UAL: outlier change +0.69x
+    • 0R0P.L: outlier change -0.43x
+    • GRPN: outlier change -0.40x
+    • NKLA: outlier change +0.41x
+    • OTRK: outlier change +1.80x
+    • PTON: outlier change +0.48x
+    • TSLA: outlier change +0.59x
+    • TWTR: outlier change +0.44x
+    • BA: outlier change +0.45x
+
+  Temporal Change Statistics (firms with bias data):
+    Coherence change: mean=-0.003, std=0.013, range=[-0.028, +0.025]
+    Outlier change:   mean=+0.29x, std=0.56x, range=[-0.43x, +1.80x]
+
+================================================================================
+AGGREGATE SUMMARY: Cross-Firm Temporal Patterns
+================================================================================
+Goal: Test if temporal changes are significant in AGGREGATE across all targets
+
+Analyzing 20 firms with sufficient bias period data
+
+1. COHERENCE CHANGES (Target-Peer Gap: IN bias vs OUT bias)
+--------------------------------------------------------------------------------
+  Descriptive Statistics:
+    Mean change:   -0.0027
+    Median change: -0.0043
+    Std dev:       0.0127
+    Range:         [-0.0281, +0.0252]
+
+  Directional Breakdown:
+    Increased gap (target more variable in bias periods): 9 (45.0%)
+    Decreased gap (target more consistent in bias periods): 11 (55.0%)
+    No change: 0
+
+  Statistical Significance Test:
+    One-sample t-test (H0: mean change = 0)
+    t-statistic: -0.938
+    p-value:     0.3602
+    ✗ NOT SIGNIFICANT: No systematic coherence change across targets (p >= 0.05)
+    Cohen's d:   -0.210 (small)
+
+2. OUTLIER RATIO CHANGES (Target/Peer Ratio: IN bias vs OUT bias)
+--------------------------------------------------------------------------------
+  Descriptive Statistics:
+    Mean change:   +0.294x
+    Median change: +0.230x
+    Std dev:       0.562x
+    Range:         [-0.426x, +1.799x]
+
+  Directional Breakdown:
+    Increased ratio (target more off-topic in bias periods):  13 (65.0%)
+    Decreased ratio (target more focused in bias periods):    7 (35.0%)
+    No change: 0
+
+  Statistical Significance Test:
+    One-sample t-test (H0: mean change = 0)
+    t-statistic: +2.337
+    p-value:     0.0306
+    ✓ SIGNIFICANT: Targets show a increase in outlier ratio during bias periods (p < 0.05)
+    Cohen's d:   +0.523 (medium)
+
+  Directional Bias Test:
+    Binomial test (H0: 50% increase, 50% decrease)
+    p-value: 0.2632
+    ✗ NOT SIGNIFICANT: No directional bias (roughly equal increases/decreases)
+
+3. ABSOLUTE VALUES: Target & Peer IN vs OUT Bias Periods
+--------------------------------------------------------------------------------
+  Target Coherence (IN vs OUT bias periods):
+    Mean IN:  0.0463
+    Mean OUT: 0.0430
+    Difference: +0.0033
+    Paired t-test: t=+1.182, p=0.2518
+    ✗ NOT SIGNIFICANT: No change in target coherence (p >= 0.05)
+
+  Peer Coherence (IN vs OUT bias periods):
+    Mean IN:  0.0509
+    Mean OUT: 0.0449
+    Difference: +0.0059
+    Paired t-test: t=+2.828, p=0.0108
+    ✓ SIGNIFICANT: Peers have HIGHER coherence in those quarters (p < 0.05)
+
+  Target Outlier Rate (IN vs OUT bias periods):
+    Mean IN:  3.21%
+    Mean OUT: 3.44%
+    Difference: -0.23%
+    Paired t-test: t=-1.102, p=0.2842
+    ✗ NOT SIGNIFICANT: No change in target outlier rate (p >= 0.05)
+
+  Peer Outlier Rate (IN vs OUT bias periods):
+    Mean IN:  2.68%
+    Mean OUT: 3.43%
+    Difference: -0.75%
+    Paired t-test: t=-4.737, p=0.0001
+    ✓ SIGNIFICANT: Peers have LOWER outlier rate in those quarters (p < 0.05)
+
+4. CORRELATION: Coherence Change vs Outlier Change
+--------------------------------------------------------------------------------
+  Pearson correlation: r=-0.602, p=0.0050
+    ✓ SIGNIFICANT: Strong negative correlation (p < 0.05)
+
+================================================================================
+AGGREGATE INTERPRETATION
+================================================================================
+✓ AGGREGATE PATTERN DETECTED:
+  Significant changes found in: outlier_change
+  This per-firm temporal analysis reveals patterns NOT visible in:
+    - Cross-sectional aggregate (all targets vs all peers)
+    - All-time per-firm comparison (target vs peers across all quarters)
+  → Confirms that TIMING matters: patterns emerge during bias periods
+
+
+[7/7] Topic Temporal Consistency (BY ATTRIBUTION TYPE)
+--------------------------------------------------------------------------------
+Testing if consistency differs by attribution type (Pos/Neg × Internal/External)
+
+6. Topic-Level Temporal Consistency Analysis
+================================================================================
+Hypothesis: Attribution bias manifests as unusual language for specific topics
+Comparing attributions to same-topic discussion (current & historical)
+
+Analyzing 269,683 attribution snippets
+
+Building topic embeddings cache (historical + same-quarter)...
+✓ Built cache for 9529 company-topic pairs
+✓ Pre-computed 0 same-quarter centroids
+
+Analyzing attribution snippets...
+
+✓ Analyzed 269,683 attribution snippets
+  Skipped 0 (missing topic)
+
+Comparison Coverage:
+  With same-quarter comparisons: 0 (0.0%)
+  With historical comparisons: 246,854 (91.5%)
+
+Outlier Detection:
+  Total outliers: 80,999 (30.0%)
+  Within-quarter outliers: 0
+  Historical outliers: 80,999
+
+Target vs Peer Comparison (AGGREGATE):
+  Target outlier rate: 28.6%
+  Peer outlier rate: 30.4%
+  → No significant difference in topic consistency
+
+Topic Consistency BY ATTRIBUTION TYPE:
+================================================================================
+
+Positive_Internal:
+  N = 125,727 attributions
+  Outlier rate: 24.4% (30,681 outliers)
+  Mean within-quarter distance: nan
+  Mean historical distance: 0.811
+  Mean outlier score: +185722.24 std devs
+  Target outlier rate: 22.6% (n=23,964)
+  Peer outlier rate: 24.8% (n=101,763)
+  → Similar consistency for targets and peers
+
+Positive_External:
+  N = 27,779 attributions
+  Outlier rate: 28.8% (8,003 outliers)
+  Mean within-quarter distance: nan
+  Mean historical distance: 0.820
+  Mean outlier score: +184880.63 std devs
+  Target outlier rate: 27.3% (n=4,193)
+  Peer outlier rate: 29.1% (n=23,586)
+  → Similar consistency for targets and peers
+
+Negative_Internal:
+  N = 19,189 attributions
+  Outlier rate: 33.8% (6,485 outliers)
+  Mean within-quarter distance: nan
+  Mean historical distance: 0.828
+  Mean outlier score: +296338.14 std devs
+  Target outlier rate: 32.9% (n=4,474)
+  Peer outlier rate: 34.1% (n=14,715)
+  → Similar consistency for targets and peers
+
+Negative_External:
+  N = 25,768 attributions
+  Outlier rate: 36.3% (9,350 outliers)
+  Mean within-quarter distance: nan
+  Mean historical distance: 0.836
+  Mean outlier score: +334922.49 std devs
+  Target outlier rate: 34.9% (n=4,624)
+  Peer outlier rate: 36.6% (n=21,144)
+  → Similar consistency for targets and peers
+
+
+Most Inconsistent Topics BY ATTRIBUTION TYPE:
+================================================================================
+
+Positive_Internal - Top 3 Inconsistent Topics:
+  1. Licensing Agreements                          | Score: +31185637.33 | Rate: 100% | N=3
+  2. "Financial Performance, Revenue"              | Score: +14691797.78 | Rate: 100% | N=5
+  3. Net Interest Income (NII)                     | Score: +9755445.00 | Rate: 67% | N=3
+
+Positive_External - Top 3 Inconsistent Topics:
+  1. Net Interest Income (NII)                     | Score: +11021889.65 | Rate: 100% | N=4
+  2. Backlog                                       | Score: +7909624.08 | Rate: 50% | N=6
+  3. Pricing                                       | Score: +3906832.40 | Rate: 20% | N=5
+
+Negative_Internal - Top 3 Inconsistent Topics:
+  1. Operating Income                              | Score: +16120189.00 | Rate: 100% | N=3
+  2. "Financial Performance, Revenue"              | Score: +3631484.33 | Rate: 17% | N=6
+  3. Cost of Goods Sold                            | Score: +2463247.78 | Rate: 59% | N=251
+
+Negative_External - Top 3 Inconsistent Topics:
+  1. Licensing Agreements                          | Score: +27508096.00 | Rate: 67% | N=3
+  2. Loan Growth                                   | Score: +6320414.06 | Rate: 83% | N=6
+  3. Backlog                                       | Score: +5731106.09 | Rate: 50% | N=8
+
+Most Inconsistent Topics (Top 5):
+  Licensing Agreements                               | Outlier Score: +19457275.20 | Rate: 60.0%
+  Operating Income                                   | Outlier Score: +10501208.83 | Rate: 66.7%
+  "Financial Performance, Revenue"                   | Outlier Score: +8927103.36 | Rate: 47.4%
+  Depreciation                                       | Outlier Score: +8804366.11 | Rate: 41.7%
+  Net Interest Income (NII)                          | Outlier Score: +6123475.88 | Rate: 88.2%
+
+4. Saving Updated Bias Analysis Results
+================================================================================
+✓ Multi-level embeddings already saved (see multilevel_embeddings_*.json)
+✓ Saved bias_prediction_results_reanalysis_20251026_211658.json
+✓ Saved bias_vector_reanalysis_20251026_211658.npy
+✓ Saved bias_vector_results_reanalysis_20251026_211658.json
+✓ Saved bias_period_comparison_reanalysis_20251026_211658.json
+✓ Saved pca_results_reanalysis_20251026_211658.json
+✓ Saved firm_analysis_reanalysis_20251026_211658.csv
+✓ Saved topic_consistency_by_attribution_type_reanalysis_20251026_211658.csv
+
+================================================================================
+✅ BIAS RE-ANALYSIS COMPLETE
+================================================================================
+
+Updated results saved to: output\embeddings
+
+Reanalysis timestamp: 20251026_211658
+
+Analyses Re-Run (7 total):
+  [1/7] Multi-level Embedding Aggregation (5 levels)
+  [2/7] Supervised Classification - Bias Prediction
+  [3/7] Bias Vector Extraction
+  [4/7] Bias Period Comparison
+  [5/7] PCA Analysis with Bias Correlation
+  [6/7] Per-Firm Analysis (both RAW and TOPIC-ADJUSTED)
+  [7/7] Topic Temporal Consistency (BY ATTRIBUTION TYPE)
+
+Files created (with '_reanalysis_' prefix to preserve originals):
+  - multilevel_embeddings_*.json (5 levels)
+  - bias_prediction_results_reanalysis_20251026_211658.json
+  - bias_vector_reanalysis_20251026_211658.npy
+  - bias_vector_results_reanalysis_20251026_211658.json
+  - bias_period_comparison_reanalysis_20251026_211658.json
+  - pca_results_reanalysis_20251026_211658.json
+  - firm_analysis_reanalysis_20251026_211658.csv
+  - topic_consistency_by_attribution_type_reanalysis_20251026_211658.csv
+  - analysis_log_20251026_211321.txt (this log)
+
+✅ Original full analysis results preserved (not overwritten)
+
+Next steps:
+  1. Review updated results in output/embeddings/
+  2. Compare reanalysis vs original results to see impact of new bias periods
+  3. Run visualization scripts to see new patterns
+  4. Compare with peer_benchmark.py validation results
