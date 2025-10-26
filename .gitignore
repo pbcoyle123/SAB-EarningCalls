@@ -32,7 +32,7 @@ wheels/
 .DS_Store
 
 # Output and Data Files
-output/
+# output/
 logs/
 *.log
 
@@ -43,21 +43,21 @@ config.json
 .env
 
 # Large data files
-*.mp3
-*.wav
-*.mp4
-raw_files/
-02/
-03/
-04/
-05/
+#*.mp3
+#*.wav
+#*.mp4
+#raw_files/
+#02/
+#03/
+#04/
+#05/
 
 # Model files
-*.pkl
-*.model
-*.h5
-*.pt
-*.pth
+#*.pkl
+#*.model
+#*.h5
+#*.pt
+#*.pth
 
 # Jupyter Notebook
 .ipynb_checkpoints/
