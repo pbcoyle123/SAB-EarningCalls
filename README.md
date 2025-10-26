@@ -14,6 +14,8 @@ Finding the footprints of self-serving attribution bias with AI: A Systematic id
 
 **Audio Analysis** (`audio_analysis/`) - Transcribes audio files from earnings calls, aligns these with existing transcript files, and creates features around the already-classified attribution labels from earlier steps so that audio features for these labels can be investigated.
 
+### GIVEN THE SIZE OF SOME OF THE OUTPUTTED EMBEDDING FILES AND THE AMOUNT OF RAW DATA NEEDED, ONLY SAMPLES OF DATA AND LOGS OF RESULTS ARE INCLUDED IN THE OUTPUT.
+
 ## Setup
 
 1. Install dependencies: `pip install -r gpt_classification/requirements.txt`
@@ -26,5 +28,5 @@ Finding the footprints of self-serving attribution bias with AI: A Systematic id
 Results are stored in the `output/` directory with classification results, embedding analysis reports, visualizations, and audio processing outputs.
 
 
-## GIVEN THE SIZE OF SOME OF THE OUTPUTTED EMBEDDING FILES AND THE AMOUNT OF RAW DATA NEEDED, ONLY SAMPLES OF DATA AND LOGS OF RESULTS ARE INCLUDED IN THE OUTPUT.
+
 
