@@ -19,6 +19,9 @@ Finding the footprints of self-serving attribution bias with AI: A Systematic id
 1. Install dependencies: `pip install -r gpt_classification/requirements.txt`
 2. Configure your OpenAI API key in `gpt_classification/config.json`
 3. Run the classification pipeline via `gpt_classification/main.py`
+4. After this you will have the data to run embedding analysis and visulisation scripts or audio analysis.
+
+   TODO: This repo will be improved as data availability improves for audio and video recordings of earning calls. If you have a source of these please get in touch!
 
 Results are stored in the `output/` directory with classification results, embedding analysis reports, visualizations, and audio processing outputs.
 
